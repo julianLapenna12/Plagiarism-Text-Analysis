@@ -10,6 +10,8 @@ public class Document {
     /* ------- Task 0 ------- */
     /*  all the basic things  */
 
+    String docID;
+
     /**
      * Create a new document using a URL
      * @param docId the document identifier
