@@ -3,7 +3,9 @@ package cpen221.mp1;
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
 import cpen221.mp1.sentiments.SentimentAnalysis;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Scanner;
 
 public class Document {
 
@@ -11,6 +13,7 @@ public class Document {
     /*  all the basic things  */
 
     String docID;
+    String docContent;
 
     /**
      * Create a new document using a URL
@@ -18,7 +21,24 @@ public class Document {
      * @param docURL the URL with the contents of the document
      */
     public Document(String docId, URL docURL) {
-        // TODO: Implement this constructor
+
+        try {
+            StringBuilder str = new StringBuilder();
+            String documentURL = docURL.toExternalForm();
+            Scanner urlScanner = new Scanner(new URL(documentURL).openStream());
+
+            while (urlScanner.hasNext()) {
+                str.append(urlScanner.nextLine());
+            }
+
+            docContent = str.toString();
+            docID = docId;
+        }
+        catch (IOException ioe) {
+            System.out.println("Problem reading from URL!");
+        }
+
+        // TODO: Remove new-line characters and non content characters
     }
 
     /**
