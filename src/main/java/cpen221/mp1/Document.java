@@ -2,10 +2,11 @@ package cpen221.mp1;
 
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
 import cpen221.mp1.sentiments.SentimentAnalysis;
+import java.io.*;
+import java.util.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Scanner;
 
 public class Document {
 
@@ -13,7 +14,7 @@ public class Document {
     /*  all the basic things  */
 
     String docID;
-    String docContent;
+    private String docContent;
 
     /**
      * Create a new document using a URL
@@ -49,6 +50,27 @@ public class Document {
      */
     public Document(String docId, String fileName) {
         // TODO: Implement this constructor
+        try {
+            String file = fileName;
+            StringBuilder doc = new StringBuilder();
+
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            for (String fileLine = reader.readLine(); fileLine != null; fileLine = reader.readLine()) {
+                doc.append(fileLine);
+            }
+            reader.close();
+
+            docContent = doc.toString();
+            System.out.print(docContent);
+        }
+        catch (IOException ioe) {
+            System.out.println("Problem reading file!");
+        }
+
+        // TODO: Filter out \n characters in string
+        //TODO: Create new method to do this
+        //TODO: Method that splits by sentence
+        //TODO: Method that splits by word
     }
 
     /**
