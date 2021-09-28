@@ -3,8 +3,8 @@ package cpen221.mp1;
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
 import cpen221.mp1.sentiments.SentimentAnalysis;
 import java.io.*;
-import java.text.BreakIterator;
 import java.util.*;
+import java.text.BreakIterator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +14,7 @@ public class Document {
     /* ------- Task 0 ------- */
     /*  all the basic things  */
 
-    private String docID;
+    String docID;
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
@@ -47,6 +47,7 @@ public class Document {
         // TODO: Remove new-line characters and non content characters
 
         docWords = splitWord(docContent);
+        splitSentence();
     }
 
     /**
@@ -58,7 +59,7 @@ public class Document {
     public Document(String docId, String fileName) {
         // TODO: Implement this constructor
         try {
-            String file = fileName;
+
             StringBuilder doc = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -69,17 +70,45 @@ public class Document {
 
             docContent = doc.toString();
             docID = docId;
-            //System.out.print(docContent);
         }
         catch (IOException ioe) {
             System.out.println("Problem reading file!");
         }
 
-        // TODO: Filter out \n characters in string
-        //TODO: Create new method to do this
-        //TODO: Method that splits by sentence
-        //TODO: Method that splits by word
+        docWords = splitWord(docContent);
+        splitSentence();
+
+        for (int n = 0; n < docSentences.length; n++) {
+            System.out.println(docSentences[n]);
+        }
     }
+
+    /**
+     *  Split the given string by sentence
+     * @Return the sentences as an array of strings
+     */
+
+    public String[] splitSentence() {
+        List<String> sentences = new ArrayList();
+
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
+        iterator.setText(docContent);
+        int start = iterator.first();
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+
+            sentences.add(docContent.substring(start, end-1));
+
+        }
+
+        docSentences = new String[sentences.size()];
+
+        for(int i = 0; i < sentences.size(); i++) {
+            docSentences[i] = sentences.get(i);
+        }
+
+        return docSentences;
+    }
+
 
     /**
      * Splits the content of the document into words
@@ -99,7 +128,7 @@ public class Document {
              start = end, end = iterator.next()) {
 
             String word = text.substring(start, end);
-            System.out.println(word);
+            //System.out.println(word);
 
             docWords.add(word);
         }
