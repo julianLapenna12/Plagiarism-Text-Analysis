@@ -3,6 +3,7 @@ package cpen221.mp1;
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
 import cpen221.mp1.sentiments.SentimentAnalysis;
 import java.io.*;
+import java.text.BreakIterator;
 import java.util.*;
 
 import java.io.IOException;
@@ -13,8 +14,11 @@ public class Document {
     /* ------- Task 0 ------- */
     /*  all the basic things  */
 
-    String docID;
+    private String docID;
     private String docContent;
+    private String[] docSentences;
+    private String[] docWords;
+
 
     /**
      * Create a new document using a URL
@@ -34,12 +38,15 @@ public class Document {
 
             docContent = str.toString();
             docID = docId;
+            //System.out.print(docContent);
         }
         catch (IOException ioe) {
             System.out.println("Problem reading from URL!");
         }
 
         // TODO: Remove new-line characters and non content characters
+
+        docWords = splitWord(docContent);
     }
 
     /**
@@ -61,7 +68,8 @@ public class Document {
             reader.close();
 
             docContent = doc.toString();
-            System.out.print(docContent);
+            docID = docId;
+            //System.out.print(docContent);
         }
         catch (IOException ioe) {
             System.out.println("Problem reading file!");
@@ -71,6 +79,38 @@ public class Document {
         //TODO: Create new method to do this
         //TODO: Method that splits by sentence
         //TODO: Method that splits by word
+    }
+
+    /**
+     * Splits the content of the document into words
+     * @param content the String containing all the content of the document
+     * @return a String array with each word as an element
+     */
+    public String[] splitWord(String content) {
+
+        String text = content; // the text to split into sentences
+        BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
+        iterator.setText(text);
+        int start = iterator.first();
+        ArrayList<String> docWords = new ArrayList<>();
+
+        for (int end = iterator.next();
+             end != BreakIterator.DONE;
+             start = end, end = iterator.next()) {
+
+            String word = text.substring(start, end);
+            System.out.println(word);
+
+            docWords.add(word);
+        }
+
+        String[] arrayOfWords = new String[docWords.size()];
+
+        for (int i = 0; i < docWords.size(); i++) {
+            arrayOfWords[i] = docWords.get(i);
+        }
+
+        return arrayOfWords;
     }
 
     /**
