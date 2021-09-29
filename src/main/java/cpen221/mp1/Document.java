@@ -2,6 +2,7 @@ package cpen221.mp1;
 
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
 import cpen221.mp1.sentiments.SentimentAnalysis;
+
 import java.io.*;
 import java.util.*;
 import java.text.BreakIterator;
@@ -22,7 +23,8 @@ public class Document {
 
     /**
      * Create a new document using a URL
-     * @param docId the document identifier
+     *
+     * @param docId  the document identifier
      * @param docURL the URL with the contents of the document
      */
     public Document(String docId, URL docURL) {
@@ -33,14 +35,13 @@ public class Document {
             Scanner urlScanner = new Scanner(new URL(documentURL).openStream());
 
             while (urlScanner.hasNext()) {
-                str.append(urlScanner.nextLine());
+                str.append(formatLineEnd(urlScanner.nextLine()));
             }
 
             docContent = str.toString();
             docID = docId;
             //System.out.print(docContent);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Problem reading from URL!");
         }
 
@@ -51,8 +52,7 @@ public class Document {
     }
 
     /**
-     *
-     * @param docId the document identifier
+     * @param docId    the document identifier
      * @param fileName the name of the file with the contents of
      *                 the document
      */
@@ -77,8 +77,7 @@ public class Document {
 
             docContent = doc.toString();
             docID = docId;
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Problem reading file!");
         }
 
@@ -90,8 +89,18 @@ public class Document {
         }
     }
 
+    public String formatLineEnd(String line) {
+        if (line.length() != 0) {
+            if ((line.charAt(line.length() - 1)) != ' ' && (line.charAt(line.length() - 1)) != '-') {
+                line = line + " ";
+            }
+        }
+        return line;
+    }
+
     /**
-     *  Split the given string by sentence
+     * Split the given string by sentence
+     *
      * @return the sentences as an array of strings
      */
 
@@ -111,7 +120,7 @@ public class Document {
 
         docSentences = new String[sentences.size()];
 
-        for(int i = 0; i < sentences.size(); i++) {
+        for (int i = 0; i < sentences.size(); i++) {
             docSentences[i] = sentences.get(i);
         }
 
@@ -121,6 +130,7 @@ public class Document {
 
     /**
      * Splits the content of the document into words
+     *
      * @param content the String containing all the content of the document
      * @return a String array with each word as an element
      */
@@ -137,9 +147,13 @@ public class Document {
              start = end, end = iterator.next()) {
 
             String word = text.substring(start, end);
-            //System.out.println(word);
+            //word = trimWord(word);
 
-            docWords.add(word);
+            if (trimWord(word) != "") {
+                docWords.add(trimWord(word));
+                System.out.println(trimWord(word));
+            }
+
         }
 
         String[] arrayOfWords = new String[docWords.size()];
@@ -153,6 +167,7 @@ public class Document {
 
     /**
      * Obtain the identifier for this document
+     *
      * @return the identifier for this document
      */
     public String getDocId() {
@@ -189,6 +204,7 @@ public class Document {
 
     /**
      * Obtain the number of sentences in the document
+     *
      * @return the number of sentences in the document
      */
     public int numSentences() {
@@ -200,7 +216,7 @@ public class Document {
      * Sentences are numbered starting from 1.
      *
      * @param sentence_number the position of the sentence to retrieve,
-     * {@code 1 <= sentence_number <= this.getSentenceCount()}
+     *                        {@code 1 <= sentence_number <= this.getSentenceCount()}
      * @return the sentence indexed by {@code sentence_number}
      */
     public String getSentence(int sentence_number) {
@@ -236,11 +252,12 @@ public class Document {
 
     /**
      * Obtain the sentence with the most positive sentiment in the document
+     *
      * @return the sentence with the most positive sentiment in the
      * document; when multiple sentences share the same sentiment value
      * returns the sentence that appears later in the document
      * @throws NoSuitableSentenceException if there is no sentence that
-     * expresses a positive sentiment
+     *                                     expresses a positive sentiment
      */
     public String getMostPositiveSentence() throws NoSuitableSentenceException {
         // TODO: Implement this method
@@ -249,11 +266,12 @@ public class Document {
 
     /**
      * Obtain the sentence with the most negative sentiment in the document
+     *
      * @return the sentence with the most negative sentiment in the document;
      * when multiple sentences share the same sentiment value, returns the
      * sentence that appears later in the document
      * @throws NoSuitableSentenceException if there is no sentence that
-     * expresses a negative sentiment
+     *                                     expresses a negative sentiment
      */
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
         // TODO: Implement this method
@@ -263,25 +281,81 @@ public class Document {
     /**
      * Assumes it is called using the string of a sentence, trims off whitespace from both ends and .!?
      * characters from the end
+     *
      * @return trimmed sentence
      */
     public String trimSentence(String input) {
-        String output = input;
+        String output = input; // is this okay, or should it be a new string? just wanna double check
 
         if (output.charAt(0) == ' ') {
             output = output.substring(1);
             output = trimSentence(output);
 
-        }
-        else if (output.charAt(output.length()-1) == ' '||
-                output.charAt(output.length()-1) == '!'||
-                output.charAt(output.length()-1) == '?'||
-                output.charAt(output.length()-1) == '.') {
+        } else if (output.charAt(output.length() - 1) == ' ' ||
+                output.charAt(output.length() - 1) == '!' ||
+                output.charAt(output.length() - 1) == '?' ||
+                output.charAt(output.length() - 1) == '.') {
 
-            output = output.substring(0, output.length()-1);
+            output = output.substring(0, output.length() - 1);
             output = trimSentence(output);
         }
         return output;
     }
 
+    public String trimWord(String input) {
+        String output = input;
+
+        if (output.length() == 0){
+            return "";
+        } else if (checkChar(output.charAt(0))) {
+            output = output.substring(1);
+            output = trimWord(output);
+        } else if (checkChar(output.charAt(output.length() - 1))){
+            output = output.substring(0, output.length() - 1);
+            output = trimWord(output);
+        }
+
+        return output;
+
+    }
+
+    public boolean checkChar(char c) {
+        switch (c) {
+            case ' ':
+            case '!':
+            case '"':
+            case '$':
+            case '%':
+            case '&':
+            case '\'':
+            case '(':
+            case ')':
+            case '*':
+            case '+':
+            case ',':
+            case '-':
+            case '.':
+            case '/':
+            case ':':
+            case ';':
+            case '<':
+            case '=':
+            case '>':
+            case '?':
+            case '@':
+            case '[':
+            case '\\':
+            case ']':
+            case '^':
+            case '_':
+            case '`':
+            case '{':
+            case '|':
+            case '}':
+            case '~':
+                return true;
+            default:
+                return false;
+        }
+    }
 }
