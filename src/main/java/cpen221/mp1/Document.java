@@ -65,7 +65,12 @@ public class Document {
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             for (String fileLine = reader.readLine(); fileLine != null; fileLine = reader.readLine()) {
-
+                //adding in the space if last character in the line is a letter
+                if (fileLine.length() != 0) {
+                    if (((int) fileLine.charAt(fileLine.length() - 1)) > 64 && ((int) fileLine.charAt(fileLine.length() - 1)) < 123) {
+                        fileLine = fileLine + " ";
+                    }
+                }
                 doc.append(fileLine);
             }
             reader.close();
@@ -259,13 +264,14 @@ public class Document {
         if (output.charAt(0) == ' ') {
             output = output.substring(1);
             output = trimSentence(output);
+
         }
-        if (output.charAt(output.length()-1) == ' '||
+        else if (output.charAt(output.length()-1) == ' '||
                 output.charAt(output.length()-1) == '!'||
                 output.charAt(output.length()-1) == '?'||
                 output.charAt(output.length()-1) == '.') {
 
-            output = output.substring(0, output.length()-2);
+            output = output.substring(0, output.length()-1);
             output = trimSentence(output);
         }
         return output;
