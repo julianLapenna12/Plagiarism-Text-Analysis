@@ -58,12 +58,14 @@ public class Document {
      */
     public Document(String docId, String fileName) {
         // TODO: Implement this constructor
+
         try {
 
             StringBuilder doc = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             for (String fileLine = reader.readLine(); fileLine != null; fileLine = reader.readLine()) {
+
                 doc.append(fileLine);
             }
             reader.close();
@@ -85,19 +87,21 @@ public class Document {
 
     /**
      *  Split the given string by sentence
-     * @Return the sentences as an array of strings
+     * @return the sentences as an array of strings
      */
 
     public String[] splitSentence() {
         List<String> sentences = new ArrayList();
+        String nextSentence;
 
         BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
         iterator.setText(docContent);
         int start = iterator.first();
+
         for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-
-            sentences.add(docContent.substring(start, end-1));
-
+            nextSentence = docContent.substring(start, end);
+            nextSentence = trimSentence(nextSentence);
+            sentences.add(nextSentence);
         }
 
         docSentences = new String[sentences.size()];
@@ -242,6 +246,29 @@ public class Document {
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
         // TODO: Implement this method
         return null;
+    }
+
+    /**
+     * Assumes it is called using the string of a sentence, trims off whitespace from both ends and .!?
+     * characters from the end
+     * @return trimmed sentence
+     */
+    public String trimSentence(String input) {
+        String output = input;
+
+        if (output.charAt(0) == ' ') {
+            output = output.substring(1);
+            output = trimSentence(output);
+        }
+        if (output.charAt(output.length()-1) == ' '||
+                output.charAt(output.length()-1) == '!'||
+                output.charAt(output.length()-1) == '?'||
+                output.charAt(output.length()-1) == '.') {
+
+            output = output.substring(0, output.length()-2);
+            output = trimSentence(output);
+        }
+        return output;
     }
 
 }
