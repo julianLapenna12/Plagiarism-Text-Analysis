@@ -14,7 +14,7 @@ public class Document {
     /* ------- Task 0 ------- */
     /*  all the basic things  */
 
-    String docID;
+    private String docID;
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
@@ -156,15 +156,23 @@ public class Document {
      * @return the identifier for this document
      */
     public String getDocId() {
-        // TODO: Implement this method
-        return null;
+        return docID;
     }
 
     /* ------- Task 1 ------- */
 
+    /**
+     * Used to calculate the average length of a word
+     *
+     * @return the average number of letters in a word
+     */
     public double averageWordLength() {
-        // TODO: Implement this method
-        return 0.0;
+        double totalLength = 0;
+        for (int i = 0; i < docWords.length; i++) {
+            totalLength += docWords[i].length();
+        }
+
+        return totalLength/docWords.length;
     }
 
     public double uniqueWordRatio() {
@@ -184,8 +192,7 @@ public class Document {
      * @return the number of sentences in the document
      */
     public int numSentences() {
-        // TODO: Implement this method
-        return 0;
+        return docSentences.length;
     }
 
     /**
