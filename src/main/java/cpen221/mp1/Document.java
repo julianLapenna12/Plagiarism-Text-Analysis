@@ -89,6 +89,12 @@ public class Document {
         }
     }
 
+    /**
+     * Formats the end of a line with a space if it doesn't end with a space or hyphen
+     *
+     * @param line the String to be formatted
+     * @return the line ending with a space or hyphen
+     */
     public String formatLineEnd(String line) {
         if (line.length() != 0) {
             if ((line.charAt(line.length() - 1)) != ' ' && (line.charAt(line.length() - 1)) != '-') {
@@ -103,7 +109,6 @@ public class Document {
      *
      * @return the sentences as an array of strings
      */
-
     public String[] splitSentence() {
         List<String> sentences = new ArrayList();
         String nextSentence;
@@ -127,9 +132,8 @@ public class Document {
         return docSentences;
     }
 
-
     /**
-     * Splits the content of the document into words
+     * Splits the content of the document at spaces and periods (and backticks apparently) into words
      *
      * @param content the String containing all the content of the document
      * @return a String array with each word as an element
@@ -163,6 +167,99 @@ public class Document {
         }
 
         return arrayOfWords;
+    }
+
+    /**
+     * Assumes it is called using the string of a sentence, trims off whitespace from both ends and .!?
+     * characters from the end
+     *
+     * @return trimmed sentence
+     */
+    public String trimSentence(String input) {
+        String output = input; // is this okay, or should it be a new string? just wanna double check
+
+        if (output.charAt(0) == ' ') {
+            output = output.substring(1);
+            output = trimSentence(output);
+
+        } else if (output.charAt(output.length() - 1) == ' ' ||
+                output.charAt(output.length() - 1) == '!' ||
+                output.charAt(output.length() - 1) == '?' ||
+                output.charAt(output.length() - 1) == '.') {
+
+            output = output.substring(0, output.length() - 1);
+            output = trimSentence(output);
+        }
+        return output;
+    }
+
+    /**
+     * Assumes it is called with a word in a String that still has special characters and punctuation
+     *
+     * @param input the String to be trimmed of special characters and formatting
+     * @return a word with no special characters or punctuation
+     */
+    public String trimWord(String input) {
+        String output = input;
+
+        if (output.length() == 0){
+            return "";
+        } else if (checkChar(output.charAt(0))) {
+            output = output.substring(1);
+            output = trimWord(output);
+        } else if (checkChar(output.charAt(output.length() - 1))){
+            output = output.substring(0, output.length() - 1);
+            output = trimWord(output);
+        }
+
+        return output;
+
+    }
+
+    /**
+     * Checks if a character is a special character
+     *
+     * @param c the character to check
+     * @return true if the character is a special character or a space, false otherwise
+     */
+    public boolean checkChar(char c) {
+        switch (c) {
+            case ' ':
+            case '!':
+            case '"':
+            case '$':
+            case '%':
+            case '&':
+            case '\'':
+            case '(':
+            case ')':
+            case '*':
+            case '+':
+            case ',':
+            case '-':
+            case '.':
+            case '/':
+            case ':':
+            case ';':
+            case '<':
+            case '=':
+            case '>':
+            case '?':
+            case '@':
+            case '[':
+            case '\\':
+            case ']':
+            case '^':
+            case '_':
+            case '`':
+            case '{':
+            case '|':
+            case '}':
+            case '~':
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -276,86 +373,5 @@ public class Document {
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
         // TODO: Implement this method
         return null;
-    }
-
-    /**
-     * Assumes it is called using the string of a sentence, trims off whitespace from both ends and .!?
-     * characters from the end
-     *
-     * @return trimmed sentence
-     */
-    public String trimSentence(String input) {
-        String output = input; // is this okay, or should it be a new string? just wanna double check
-
-        if (output.charAt(0) == ' ') {
-            output = output.substring(1);
-            output = trimSentence(output);
-
-        } else if (output.charAt(output.length() - 1) == ' ' ||
-                output.charAt(output.length() - 1) == '!' ||
-                output.charAt(output.length() - 1) == '?' ||
-                output.charAt(output.length() - 1) == '.') {
-
-            output = output.substring(0, output.length() - 1);
-            output = trimSentence(output);
-        }
-        return output;
-    }
-
-    public String trimWord(String input) {
-        String output = input;
-
-        if (output.length() == 0){
-            return "";
-        } else if (checkChar(output.charAt(0))) {
-            output = output.substring(1);
-            output = trimWord(output);
-        } else if (checkChar(output.charAt(output.length() - 1))){
-            output = output.substring(0, output.length() - 1);
-            output = trimWord(output);
-        }
-
-        return output;
-
-    }
-
-    public boolean checkChar(char c) {
-        switch (c) {
-            case ' ':
-            case '!':
-            case '"':
-            case '$':
-            case '%':
-            case '&':
-            case '\'':
-            case '(':
-            case ')':
-            case '*':
-            case '+':
-            case ',':
-            case '-':
-            case '.':
-            case '/':
-            case ':':
-            case ';':
-            case '<':
-            case '=':
-            case '>':
-            case '?':
-            case '@':
-            case '[':
-            case '\\':
-            case ']':
-            case '^':
-            case '_':
-            case '`':
-            case '{':
-            case '|':
-            case '}':
-            case '~':
-                return true;
-            default:
-                return false;
-        }
     }
 }
