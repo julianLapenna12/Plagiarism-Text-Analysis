@@ -2,9 +2,10 @@ package cpen221.mp1;
 
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
 import cpen221.mp1.sentiments.SentimentAnalysis;
+
 import java.io.*;
-import java.text.BreakIterator;
 import java.util.*;
+import java.text.BreakIterator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +23,8 @@ public class Document {
 
     /**
      * Create a new document using a URL
-     * @param docId the document identifier
+     *
+     * @param docId  the document identifier
      * @param docURL the URL with the contents of the document
      */
     public Document(String docId, URL docURL) {
@@ -33,56 +35,106 @@ public class Document {
             Scanner urlScanner = new Scanner(new URL(documentURL).openStream());
 
             while (urlScanner.hasNext()) {
-                str.append(urlScanner.nextLine());
+                str.append(formatLineEnd(urlScanner.nextLine()));
             }
 
             docContent = str.toString();
             docID = docId;
             //System.out.print(docContent);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Problem reading from URL!");
         }
 
         // TODO: Remove new-line characters and non content characters
 
         docWords = splitWord(docContent);
+        splitSentence();
     }
 
     /**
-     *
-     * @param docId the document identifier
+     * @param docId    the document identifier
      * @param fileName the name of the file with the contents of
      *                 the document
      */
     public Document(String docId, String fileName) {
         // TODO: Implement this constructor
+
         try {
-            String file = fileName;
+
             StringBuilder doc = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             for (String fileLine = reader.readLine(); fileLine != null; fileLine = reader.readLine()) {
+                //adding in the space if last character in the line is a letter
+                if (fileLine.length() != 0) {
+                    if (((int) fileLine.charAt(fileLine.length() - 1)) > 64 && ((int) fileLine.charAt(fileLine.length() - 1)) < 123) {
+                        fileLine = fileLine + " ";
+                    }
+                }
                 doc.append(fileLine);
             }
             reader.close();
 
             docContent = doc.toString();
             docID = docId;
-            //System.out.print(docContent);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Problem reading file!");
         }
 
-        // TODO: Filter out \n characters in string
-        //TODO: Create new method to do this
-        //TODO: Method that splits by sentence
-        //TODO: Method that splits by word
+        docWords = splitWord(docContent);
+        splitSentence();
+
+        for (int n = 0; n < docSentences.length; n++) {
+            System.out.println(docSentences[n]);
+        }
     }
 
     /**
-     * Splits the content of the document into words
+     * Formats the end of a line with a space if it doesn't end with a space or hyphen
+     *
+     * @param line the String to be formatted
+     * @return the line ending with a space or hyphen
+     */
+    public String formatLineEnd(String line) {
+        if (line.length() != 0) {
+            if ((line.charAt(line.length() - 1)) != ' ' && (line.charAt(line.length() - 1)) != '-') {
+                line = line + " ";
+            }
+        }
+        return line;
+    }
+
+    /**
+     * Split the given string by sentence
+     *
+     * @return the sentences as an array of strings
+     */
+    public String[] splitSentence() {
+        List<String> sentences = new ArrayList();
+        String nextSentence;
+
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
+        iterator.setText(docContent);
+        int start = iterator.first();
+
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+            nextSentence = docContent.substring(start, end);
+            nextSentence = trimSentence(nextSentence);
+            sentences.add(nextSentence);
+        }
+
+        docSentences = new String[sentences.size()];
+
+        for (int i = 0; i < sentences.size(); i++) {
+            docSentences[i] = sentences.get(i);
+        }
+
+        return docSentences;
+    }
+
+    /**
+     * Splits the content of the document at spaces and periods (and backticks apparently) into words
+     *
      * @param content the String containing all the content of the document
      * @return a String array with each word as an element
      */
@@ -99,9 +151,13 @@ public class Document {
              start = end, end = iterator.next()) {
 
             String word = text.substring(start, end);
-            System.out.println(word);
+            //word = trimWord(word);
 
-            docWords.add(word);
+            if (trimWord(word) != "") {
+                docWords.add(trimWord(word));
+                System.out.println(trimWord(word));
+            }
+
         }
 
         String[] arrayOfWords = new String[docWords.size()];
@@ -114,19 +170,121 @@ public class Document {
     }
 
     /**
+     * Assumes it is called using the string of a sentence, trims off whitespace from both ends and .!?
+     * characters from the end
+     *
+     * @return trimmed sentence
+     */
+    public String trimSentence(String input) {
+        String output = input; // is this okay, or should it be a new string? just wanna double check
+
+        if (output.charAt(0) == ' ') {
+            output = output.substring(1);
+            output = trimSentence(output);
+
+        } else if (output.charAt(output.length() - 1) == ' ' ||
+                output.charAt(output.length() - 1) == '!' ||
+                output.charAt(output.length() - 1) == '?' ||
+                output.charAt(output.length() - 1) == '.') {
+
+            output = output.substring(0, output.length() - 1);
+            output = trimSentence(output);
+        }
+        return output;
+    }
+
+    /**
+     * Assumes it is called with a word in a String that still has special characters and punctuation
+     *
+     * @param input the String to be trimmed of special characters and formatting
+     * @return a word with no special characters or punctuation
+     */
+    public String trimWord(String input) {
+        String output = input;
+
+        if (output.length() == 0){
+            return "";
+        } else if (checkChar(output.charAt(0))) {
+            output = output.substring(1);
+            output = trimWord(output);
+        } else if (checkChar(output.charAt(output.length() - 1))){
+            output = output.substring(0, output.length() - 1);
+            output = trimWord(output);
+        }
+
+        return output;
+
+    }
+
+    /**
+     * Checks if a character is a special character
+     *
+     * @param c the character to check
+     * @return true if the character is a special character or a space, false otherwise
+     */
+    public boolean checkChar(char c) {
+        switch (c) {
+            case ' ':
+            case '!':
+            case '"':
+            case '$':
+            case '%':
+            case '&':
+            case '\'':
+            case '(':
+            case ')':
+            case '*':
+            case '+':
+            case ',':
+            case '-':
+            case '.':
+            case '/':
+            case ':':
+            case ';':
+            case '<':
+            case '=':
+            case '>':
+            case '?':
+            case '@':
+            case '[':
+            case '\\':
+            case ']':
+            case '^':
+            case '_':
+            case '`':
+            case '{':
+            case '|':
+            case '}':
+            case '~':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
      * Obtain the identifier for this document
+     *
      * @return the identifier for this document
      */
     public String getDocId() {
-        // TODO: Implement this method
-        return null;
+        return docID;
     }
 
     /* ------- Task 1 ------- */
 
+    /**
+     * Used to calculate the average length of a word
+     *
+     * @return the average number of letters in a word
+     */
     public double averageWordLength() {
-        // TODO: Implement this method
-        return 0.0;
+        double totalLength = 0;
+        for (int i = 0; i < docWords.length; i++) {
+            totalLength += docWords[i].length();
+        }
+
+        return totalLength/docWords.length;
     }
 
     public double uniqueWordRatio() {
@@ -143,11 +301,11 @@ public class Document {
 
     /**
      * Obtain the number of sentences in the document
+     *
      * @return the number of sentences in the document
      */
     public int numSentences() {
-        // TODO: Implement this method
-        return 0;
+        return docSentences.length;
     }
 
     /**
@@ -155,7 +313,7 @@ public class Document {
      * Sentences are numbered starting from 1.
      *
      * @param sentence_number the position of the sentence to retrieve,
-     * {@code 1 <= sentence_number <= this.getSentenceCount()}
+     *                        {@code 1 <= sentence_number <= this.getSentenceCount()}
      * @return the sentence indexed by {@code sentence_number}
      */
     public String getSentence(int sentence_number) {
@@ -191,11 +349,12 @@ public class Document {
 
     /**
      * Obtain the sentence with the most positive sentiment in the document
+     *
      * @return the sentence with the most positive sentiment in the
      * document; when multiple sentences share the same sentiment value
      * returns the sentence that appears later in the document
      * @throws NoSuitableSentenceException if there is no sentence that
-     * expresses a positive sentiment
+     *                                     expresses a positive sentiment
      */
     public String getMostPositiveSentence() throws NoSuitableSentenceException {
         // TODO: Implement this method
@@ -204,15 +363,15 @@ public class Document {
 
     /**
      * Obtain the sentence with the most negative sentiment in the document
+     *
      * @return the sentence with the most negative sentiment in the document;
      * when multiple sentences share the same sentiment value, returns the
      * sentence that appears later in the document
      * @throws NoSuitableSentenceException if there is no sentence that
-     * expresses a negative sentiment
+     *                                     expresses a negative sentiment
      */
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
         // TODO: Implement this method
         return null;
     }
-
 }
