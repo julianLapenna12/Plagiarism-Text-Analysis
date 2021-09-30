@@ -155,7 +155,7 @@ public class Document {
 
             if (trimWord(word) != "") {
                 docWords.add(trimWord(word));
-                System.out.println(trimWord(word));
+                //System.out.println(trimWord(word));
             }
 
         }
