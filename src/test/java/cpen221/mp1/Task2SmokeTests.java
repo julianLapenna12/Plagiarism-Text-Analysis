@@ -1,5 +1,7 @@
 package cpen221.mp1;
 
+import cpen221.mp1.exceptions.NoSuitableSentenceException;
+import cpen221.mp1.sentiments.SentimentAnalysis;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,14 @@ public class Task2SmokeTests {
     @Test
     public void testHapaxLegomanaRatio() {
         Assertions.assertEquals(0.355, testDocument1.hapaxLegomanaRatio(), 0.005);
+    }
+
+    @Test
+    public void testSent(){try {
+        SentimentAnalysis.getMostPositiveSentence();
+        } catch (NoSuitableSentenceException e) {
+        e.printStackTrace();
+    }
     }
 
 }
