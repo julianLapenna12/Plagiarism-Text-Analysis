@@ -19,6 +19,7 @@ public class Document {
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
+    private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
 
 
     /**
@@ -38,7 +39,7 @@ public class Document {
                 str.append(formatLineEnd(urlScanner.nextLine()));
             }
 
-            docContent = str.toString();
+            docContent = str.toString().toLowerCase();
             docID = docId;
             //System.out.print(docContent);
         } catch (IOException ioe) {
@@ -75,7 +76,7 @@ public class Document {
             }
             reader.close();
 
-            docContent = doc.toString();
+            docContent = doc.toString().toLowerCase();
             docID = docId;
         } catch (IOException ioe) {
             System.out.println("Problem reading file!");
@@ -84,9 +85,12 @@ public class Document {
         docWords = splitWord(docContent);
         splitSentence();
 
+        /* test print statements
         for (int n = 0; n < docSentences.length; n++) {
             System.out.println(docSentences[n]);
         }
+
+         */
     }
 
     /**
@@ -155,7 +159,8 @@ public class Document {
 
             if (trimWord(word) != "") {
                 docWords.add(trimWord(word));
-                System.out.println(trimWord(word));
+                classifyWord(trimWord(word));
+                //System.out.println(trimWord(word));
             }
 
         }
@@ -202,12 +207,12 @@ public class Document {
     public String trimWord(String input) {
         String output = input;
 
-        if (output.length() == 0){
+        if (output.length() == 0) {
             return "";
         } else if (checkChar(output.charAt(0))) {
             output = output.substring(1);
             output = trimWord(output);
-        } else if (checkChar(output.charAt(output.length() - 1))){
+        } else if (checkChar(output.charAt(output.length() - 1))) {
             output = output.substring(0, output.length() - 1);
             output = trimWord(output);
         }
@@ -263,6 +268,42 @@ public class Document {
     }
 
     /**
+     * Used to access total words in the document
+     *
+     * @return double value of word count in the doc
+     */
+    public double totalWords() {
+        return docWords.length;
+    }
+
+    /**
+     * Adds words to a treemap where the key is the unique string and the value is the occurances
+     *
+     * @param word string key to classify in the treemap
+     */
+    public void classifyWord(String word) {
+        if (catalogueWords.containsKey(word)) {
+            catalogueWords.put(word, catalogueWords.get(word) + 1);
+        } else {
+            catalogueWords.put(word, 1);
+        }
+    }
+
+    public int uniqueWordsCount() {
+        return catalogueWords.size();
+    }
+
+    public int hapaxWordsCount() {
+        int count = 0;
+
+        for(Map.Entry<String, Integer> entry: catalogueWords.entrySet()) {
+            if(entry.getValue() == 1) count++;
+        }
+
+        return count;
+    }
+
+    /**
      * Obtain the identifier for this document
      *
      * @return the identifier for this document
@@ -284,17 +325,20 @@ public class Document {
             totalLength += docWords[i].length();
         }
 
-        return totalLength/docWords.length;
+        return totalLength / docWords.length;
     }
 
     public double uniqueWordRatio() {
-        // TODO: Implement this method
-        return 0.0;
+        double uniqueRatio;
+
+        uniqueRatio = (double) uniqueWordsCount()/totalWords();
+        return uniqueRatio;
     }
 
     public double hapaxLegomanaRatio() {
-        // TODO: Implement this method
-        return 0.0;
+        double hapaxRatio;
+        hapaxRatio = (double) hapaxWordsCount()/totalWords();
+        return hapaxRatio;
     }
 
     /* ------- Task 2 ------- */

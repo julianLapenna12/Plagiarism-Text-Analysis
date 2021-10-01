@@ -36,12 +36,6 @@ public class Task2SmokeTests {
         Assertions.assertEquals(0.355, testDocument1.hapaxLegomanaRatio(), 0.005);
     }
 
-    @Test
-    public void testSent(){try {
-        SentimentAnalysis.getMostPositiveSentence();
-        } catch (NoSuitableSentenceException e) {
-        e.printStackTrace();
-    }
-    }
+
 
 }
