@@ -20,6 +20,8 @@ public class Document {
     private String[] docSentences;
     private String[] docWords;
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
+    private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
+             ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
 
 
     /**
@@ -228,43 +230,12 @@ public class Document {
      * @return true if the character is a special character or a space, false otherwise
      */
     public boolean checkChar(char c) {
-        switch (c) {
-            case ' ':
-            case '!':
-            case '"':
-            case '$':
-            case '%':
-            case '&':
-            case '\'':
-            case '(':
-            case ')':
-            case '*':
-            case '+':
-            case ',':
-            case '-':
-            case '.':
-            case '/':
-            case ':':
-            case ';':
-            case '<':
-            case '=':
-            case '>':
-            case '?':
-            case '@':
-            case '[':
-            case '\\':
-            case ']':
-            case '^':
-            case '_':
-            case '`':
-            case '{':
-            case '|':
-            case '}':
-            case '~':
-                return true;
-            default:
-                return false;
-        }
+      for(int i = 0; i < specialChars.length ; i++){
+          if(c == specialChars[i]){
+              return true;
+          }
+      }
+      return false;
     }
 
     /**

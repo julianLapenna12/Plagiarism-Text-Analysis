@@ -12,36 +12,36 @@ public class SentimentAnalysis {
     /**
      * @param text is a non-empty array of strings to be analyzed by the sentiment analyzer
      * @return a Sentiment object with the most positive scores of all the analyzed sentences, contains the score and magnitude and the original sentence
-     * @throws NoSuitableSentenceException when there is no sentence which can be analyzed I.E. the text array is empty
+     * @throws NoSuitableSentenceException when there is no sentence with positive sentiment
      */
     public static Sentiment getMostPositiveSentence(String[] text)
         throws NoSuitableSentenceException{
         List<Sentiment> sentences = getSentenceSentiment(text);
-        if(text.length == 0 ||sentences.get(0) == null){throw new NoSuitableSentenceException();}
         Sentiment mostPositive = sentences.get(0);
         for(Sentiment sentence : sentences){
             if (sentence.getScore() >= mostPositive.getScore()){
                 mostPositive = sentence;
             }
         }
+        if(mostPositive.getScore() <= 0){throw new NoSuitableSentenceException();}
         return mostPositive;
     }
 
     /**
      * @param text is a non-empty array of strings to be analyzed by the sentiment analyzer
      * @return a Sentiment object with the most negative scores of all the analyzed sentences, contains the score and magnitude and the original sentence
-     * @throws NoSuitableSentenceException when there is no sentence which can be analyzed I.E. the text array is empty
+     * @throws NoSuitableSentenceException when there is no sentence with negative sentiment
      */
     public static Sentiment getMostNegativeSentence(String[] text)
         throws NoSuitableSentenceException {
         List<Sentiment> sentences = getSentenceSentiment(text);
-        if(text.length == 0 ||sentences.get(0) == null){throw new NoSuitableSentenceException();}
         Sentiment mostNegative = sentences.get(0);
         for(Sentiment sentence : sentences){
             if (sentence.getScore() >= mostNegative.getScore()){
                 mostNegative = sentence;
             }
         }
+        if(mostNegative.getScore() <= 0){throw new NoSuitableSentenceException();}
         return mostNegative;
     }
 
