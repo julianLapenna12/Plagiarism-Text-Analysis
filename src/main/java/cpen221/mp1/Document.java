@@ -101,7 +101,7 @@ public class Document {
      * @param line the String to be formatted
      * @return the line ending with a space or hyphen
      */
-    public String formatLineEnd(String line) {
+    private String formatLineEnd(String line) {
         if (line.length() != 0) {
             if ((line.charAt(line.length() - 1)) != ' ' && (line.charAt(line.length() - 1)) != '-') {
                 line = line + " ";
@@ -115,7 +115,7 @@ public class Document {
      *
      * @return the sentences as an array of strings
      */
-    public String[] splitSentence() {
+    private String[] splitSentence() {
         List<String> sentences = new ArrayList();
         String nextSentence;
 
@@ -144,7 +144,7 @@ public class Document {
      * @param content the String containing all the content of the document
      * @return a String array with each word as an element
      */
-    public String[] splitWord(String content) {
+    private String[] splitWord(String content) {
 
         String text = content; // the text to split into sentences
         BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
@@ -182,7 +182,7 @@ public class Document {
      *
      * @return trimmed sentence
      */
-    public String trimSentence(String input) {
+    private String trimSentence(String input) {
         String output = input; // is this okay, or should it be a new string? just wanna double check
 
         if (output.charAt(0) == ' ') {
@@ -206,7 +206,7 @@ public class Document {
      * @param input the String to be trimmed of special characters and formatting
      * @return a word with no special characters or punctuation
      */
-    public String trimWord(String input) {
+    private String trimWord(String input) {
         String output = input;
 
         if (output.length() == 0) {
@@ -229,7 +229,7 @@ public class Document {
      * @param c the character to check
      * @return true if the character is a special character or a space, false otherwise
      */
-    public boolean checkChar(char c) {
+    private boolean checkChar(char c) {
       for(int i = 0; i < specialChars.length ; i++){
           if(c == specialChars[i]){
               return true;
@@ -252,7 +252,7 @@ public class Document {
      *
      * @param word string key to classify in the treemap
      */
-    public void classifyWord(String word) {
+    private void classifyWord(String word) {
         if (catalogueWords.containsKey(word)) {
             catalogueWords.put(word, catalogueWords.get(word) + 1);
         } else {
@@ -260,11 +260,11 @@ public class Document {
         }
     }
 
-    public int uniqueWordsCount() {
+    private int uniqueWordsCount() {
         return catalogueWords.size();
     }
 
-    public int hapaxWordsCount() {
+    private int hapaxWordsCount() {
         int count = 0;
 
         for(Map.Entry<String, Integer> entry: catalogueWords.entrySet()) {
