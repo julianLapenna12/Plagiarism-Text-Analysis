@@ -19,6 +19,7 @@ public class Document {
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
+    private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
     private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
              ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
@@ -332,18 +333,35 @@ public class Document {
      * @return the sentence indexed by {@code sentence_number}
      */
     public String getSentence(int sentence_number) {
-        // TODO: Implement this method
-        return null;
+        return docSentences[sentence_number-1];
     }
 
     public double averageSentenceLength() {
-        // TODO: Implement this method
-        return 0.0;
+        double total = 0;
+        for (int i = 0; i < docSentences.length; i++) {
+            total += docSentences[i].length();
+        }
+        return total/docSentences.length;
     }
 
     public double averageSentenceComplexity() {
-        // TODO: Implement this method
-        return 0.0;
+        double total = 0;
+        for (int i = 0; i < docSentences.length; i++) {
+            total += getNumPhrases(docSentences[i]);
+        }
+        return total/docSentences.length;
+    }
+
+    public int getNumPhrases(String sentence) {
+        int count = 0;
+
+        for (int i = 1; i < sentence.length()-1; i++){
+            if ((sentence.charAt(i) == ',') || (sentence.charAt(i) == ':')|| (sentence.charAt(i) == ';')) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /* ------- Task 3 ------- */
