@@ -56,6 +56,8 @@ public class Document {
     }
 
     /**
+     * Create a new document using a file and the filename
+     *
      * @param docId    the document identifier
      * @param fileName the name of the file with the contents of
      *                 the document
@@ -92,7 +94,6 @@ public class Document {
         for (int n = 0; n < docSentences.length; n++) {
             System.out.println(docSentences[n]);
         }
-
          */
     }
 
@@ -261,10 +262,18 @@ public class Document {
         }
     }
 
+    /**
+     *
+     * @return amount of unique words that appear in the document
+     */
     private int uniqueWordsCount() {
         return catalogueWords.size();
     }
 
+    /**
+     *
+     * @return amount of words that appear exactly once in the document
+     */
     private int hapaxWordsCount() {
         int count = 0;
 
@@ -300,6 +309,10 @@ public class Document {
         return totalLength / docWords.length;
     }
 
+    /**
+     *
+     * @return the ratio of unique words to total words in the document
+     */
     public double uniqueWordRatio() {
         double uniqueRatio;
 
@@ -307,6 +320,10 @@ public class Document {
         return uniqueRatio;
     }
 
+    /**
+     *
+     * @return the ratio of words that appear once to the total words in the document
+     */
     public double hapaxLegomanaRatio() {
         double hapaxRatio;
         hapaxRatio = (double) hapaxWordsCount()/totalWords();
