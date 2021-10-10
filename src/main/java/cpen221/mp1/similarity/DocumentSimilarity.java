@@ -17,7 +17,8 @@ public class DocumentSimilarity {
     private final int WT_JS_DIVERGENCE = 50;
     /* ---- END OF WEIGHTS ------ */
 
-    Set<String> allWords = new HashSet<>();
+    private Set<String> allWords = new HashSet<>();
+    private final int DIV_COMPARISONS = 5;
 
     /* ------- Task 4 ------- */
 
@@ -58,9 +59,22 @@ public class DocumentSimilarity {
      * @return the Document Divergence between the given documents
      */
     public double documentDivergence(Document doc1, Document doc2) {
-        // TODO: Implement this method
+        double totalDivergence = 0.0;
+
         // Use the provided weights in computing the document divergence
-        return 0.0;
+        int[] weights = {WT_AVG_SENTENCE_LENGTH, WT_AVG_SENTENCE_CPLXTY, WT_AVG_WORD_LENGTH,
+                WT_UNIQUE_WORD_RATIO, WT_HAPAX_LEGOMANA_RATIO};
+
+        double[] doc1_metrics = getDocumentMetrics(doc1);
+        double[] doc2_metrics = getDocumentMetrics(doc2);
+
+        for (int i = 0; i < DIV_COMPARISONS; i++) {
+            totalDivergence += weights[i] * Math.abs(doc1_metrics[i] - doc2_metrics[i]);
+        }
+
+        totalDivergence += WT_JS_DIVERGENCE * jsDivergence(doc1, doc2);
+
+        return totalDivergence;
     }
 
     /**
@@ -105,5 +119,16 @@ public class DocumentSimilarity {
         }
 
         return word_probability * (Math.log(word_probability / average_probability));
+    }
+
+    /**
+     * Putting the document metrics into an array for easy sorting
+     *
+     * @param doc the given document to get the metrics from
+     * @return the metrics calculated in tasks 1 and 2 for given document
+     */
+    private double[] getDocumentMetrics(Document doc) {
+        return new double[] {doc.averageSentenceLength(), doc.averageSentenceComplexity(),
+                doc.averageWordLength(), doc.uniqueWordRatio(), doc.hapaxLegomanaRatio()};
     }
 }
