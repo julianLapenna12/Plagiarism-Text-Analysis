@@ -372,8 +372,7 @@ public class Document {
      *                                     expresses a positive sentiment
      */
     public String getMostPositiveSentence() throws NoSuitableSentenceException {
-        // TODO: Implement this method
-        return null;
+        return SentimentAnalysis.getMostPositiveSentence(docSentences);
     }
 
     /**
@@ -386,7 +385,6 @@ public class Document {
      *                                     expresses a negative sentiment
      */
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
-        // TODO: Implement this method
-        return null;
+        return SentimentAnalysis.getMostNegativeSentence(docSentences);
     }
 }
