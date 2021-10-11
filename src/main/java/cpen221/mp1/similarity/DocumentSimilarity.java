@@ -32,7 +32,7 @@ public class DocumentSimilarity {
      * @param doc2 the second document, is not null
      * @return the Document Divergence between the given documents
      */
-    public double documentDivergence(Document doc1, Document doc2) {
+    public static double documentDivergence(Document doc1, Document doc2) {
         // TODO: Implement this method
         // Use the provided weights in computing the document divergence
         return 0.0;
