@@ -330,6 +330,14 @@ public class Document {
         return hapaxRatio;
     }
 
+    public String[] getDocWords() {
+        return docWords;
+    }
+
+    public TreeMap<String, Integer> getCatalogueWords() {
+        return catalogueWords;
+    }
+
     /* ------- Task 2 ------- */
 
     /**
