@@ -35,6 +35,10 @@ public class ComplexNumber {
         im = imNew;
     }
 
+    public double amp(){
+        return Math.sqrt(Math.pow(re, 2) + Math.pow(im, 2));
+    }
+
     public String toString() {
         // TODO: return a string representation
         return null;

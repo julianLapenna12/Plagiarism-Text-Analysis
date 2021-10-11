@@ -2,7 +2,13 @@ package cpen221.mp1.cryptanalysis;
 
 import cpen221.mp1.Document;
 
-public abstract class Cryptography {
+import java.util.Random;
+
+import static cpen221.mp1.cryptanalysis.DFT.dft;
+
+public class Cryptography {
+
+    private static final char paddingChar = 'a';
 
     /**
      * Encrypt a document by replacing the i-th character, c_i, with
@@ -25,8 +31,26 @@ public abstract class Cryptography {
      * @return the encrypted array.
      */
     public static int[] encrypt(Document doc, int length, int period, int amplitude) {
-        // TODO: implement this method
-        return null;
+        int [] encrypted = new int[length];
+        char[] encryptSeq = createEncryptSeq(doc, length);
+        for (int i = 0; i < length; i++){
+            encrypted[i] =  (int) encryptSeq[i] + (int)(amplitude * Math.sin((double) i * 2 * Math.PI / (double)period + Math.PI / 4));
+        }
+        return encrypted;
+    }
+
+    private static char[] createEncryptSeq(Document doc, int length){
+        String content = doc.getDocContent();
+        if(content.length() < length){
+            char[] padding = new char[length - content.length()];
+            for (int i  = 0; i < padding.length; i++) {
+                padding[i] = paddingChar;
+            }
+            return content.concat(new String(padding)).toCharArray();
+        }
+        else{
+            return content.substring(0, length).toCharArray();
+        }
     }
 
     /**
@@ -35,8 +59,35 @@ public abstract class Cryptography {
      * @return the decrypted text.
      */
     public static String decrypt(int[] codedText) {
-        // TODO: implement this method
-        return null;
+        char[] output = new char[codedText.length];
+        ComplexNumber[] fourier = dft(codedText);
+        int amp = 0;
+        int freq = 0;
+        for(int i = 1; i < fourier.length; i++){
+            if (fourier[i].re() > amp){
+                amp = (int)fourier[i].amp();
+                freq = i;
+            }
+        }
+        //Calculate Amp and Round it to the nearest value, 64, 128, 256, 512
+        double ampDouble = ((amp * 2.0 / fourier.length) / 64.0);
+        if(ampDouble < 1.5){
+            amp = 64;
+        }
+        else if(ampDouble >= 1.5 && ampDouble < 3){
+            amp = 128;
+        }
+        else if(ampDouble >= 3 && ampDouble < 6){
+            amp = 256;
+        }
+        else {amp = 512;}
+
+        int period = codedText.length / freq;
+        for(int j = 0; j < codedText.length; j++){
+            codedText[j] -= (int)(amp * Math.sin(j * 2 * Math.PI / (period) + Math.PI / 4));
+            output[j] = (char) codedText[j];
+        }
+        return new String(output);
     }
 
 }
