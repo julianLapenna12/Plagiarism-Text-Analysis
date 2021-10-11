@@ -20,10 +20,24 @@ public class UntanglerTest {
     public void testUntangler(){
         String seq1 = "hi!";
         String seq2 = "bye!";
-        //Assertions.assertTrue(areTangled("aabbb", seq1, seq2));
-        Assertions.assertTrue(areTangled("hi!bye!hi!bye!", seq1, seq2));
-        //Assertions.assertTrue(areTangled("bbbaabbbaa", seq1, seq2));
-        //Assertions.assertFalse(areTangled("bbbaabbbzz", seq1, seq2));
+        Assertions.assertTrue(areTangled("hi!bye!hi!", seq1, seq2));
+        Assertions.assertFalse(areTangled("hi!bye!hi!a", seq1, seq2));
+    }
+
+    @Test
+    public void exampleTest(){
+        String seq1 = "110";
+        String seq2 = "111";
+        Assertions.assertTrue(areTangled("111011111110", seq1, seq2));
+        Assertions.assertFalse(areTangled("11101111111z0", seq1, seq2));
+    }
+
+    @Test
+    public void testLongString(){
+        String seq1 = "TheQuickBrownFox";
+        String seq2 = "JumpedOverTheLazyDog";
+        Assertions.assertTrue(areTangled("TheQuickJumpedOverTheLazyDogBrownFox", seq1, seq2));
+        Assertions.assertTrue(areTangled("TheJumpedOverTheLazyDogQuickJumpedOverTheLazyDogBrownFoJumpedOverTh", seq1, seq2));
     }
 
 }
