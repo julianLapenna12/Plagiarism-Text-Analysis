@@ -1,0 +1,64 @@
+doc1
+
+total words: 36
+total sentences: 4
+avg sentence len: 9
+avg phrases per sentence: 1.25
+avg word len: 4.25
+unique word ratio: 0.8611
+hapax ratio: 0.75
+
+
+doc2
+
+total words: 60
+total sentences: 3
+avg sentence len: 20
+avg phrases per sentence: 2
+avg word len: 4.4333
+unique word ratio: 0.7333
+hapax ratio: 0.6166
+
+
+doc3
+
+total words: 40
+total sentences: 4
+avg sentence len: 10
+avg phrases per sentence: 1.25
+avg word len: 4.325
+unique word ratio: 0.725
+hapax ratio: 0.525
+
+
+doc4
+
+total words: 50
+total sentences: 3
+avg sentence len: 16.666
+avg phrases per sentence: 2.666
+avg word len: 4.16
+unique word ratio: 0.86
+hapax ratio: 0.74
+
+
+doc5
+
+total words: 52
+total sentences: 4
+avg sentence len: 13
+avg phrases per sentence: 1.25
+avg word len: 3.9038
+unique word ratio: 0.9231
+hapax ratio: 0.8462
+
+
+doc6
+
+total words: 22
+total sentences: 4
+avg sentence len: 5.5
+avg phrases per sentence: 1.25
+avg word len: 3.8636
+unique word ratio: 0.8182
+hapax ratio: 0.7273
