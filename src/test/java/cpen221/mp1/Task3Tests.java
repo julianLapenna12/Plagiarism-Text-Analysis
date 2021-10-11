@@ -1,6 +1,7 @@
 package cpen221.mp1;
 
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,13 +14,13 @@ public class Task3Tests {
 
     @BeforeAll
     public static void setupTests() throws MalformedURLException {
-        testDocument1 = new Document("The Ant and The Cricket", "resources/antcrick.txt");
+        testDocument1 = new Document("SentimentTest", "resources/PositiveNegativeSentence.txt");
     }
 
     @Test
     public void testSentimentPositive() {
         try {
-            System.out.println(testDocument1.getMostPositiveSentence());
+            Assertions.assertEquals(testDocument1.getMostPositiveSentence(), "I love Coding so much. my favorite programming language is Java because it is the best.");
         } catch (NoSuitableSentenceException e) {
             e.printStackTrace();
         }
@@ -28,7 +29,7 @@ public class Task3Tests {
     @Test
     public void testSentimentNegative() {
         try {
-            System.out.println(testDocument1.getMostNegativeSentence());
+            Assertions.assertEquals(testDocument1.getMostNegativeSentence(), "I hate coding, its the absolute worst.");
         } catch (NoSuitableSentenceException e) {
             e.printStackTrace();
             System.out.println("No suitable sentence");
@@ -54,12 +55,4 @@ public class Task3Tests {
         }
 
     }
-    @Test
-    public void test2(){
-        String[] test = {"A", "b"};
-        String a = test[0];
-        a = a.toLowerCase();
-        System.out.println(test[0]);
-    }
-
 }
