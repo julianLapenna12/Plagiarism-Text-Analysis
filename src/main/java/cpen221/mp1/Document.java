@@ -19,6 +19,7 @@ public class Document {
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
+    private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
     private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
              ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
@@ -55,6 +56,8 @@ public class Document {
     }
 
     /**
+     * Create a new document using a file and the filename
+     *
      * @param docId    the document identifier
      * @param fileName the name of the file with the contents of
      *                 the document
@@ -91,7 +94,6 @@ public class Document {
         for (int n = 0; n < docSentences.length; n++) {
             System.out.println(docSentences[n]);
         }
-
          */
     }
 
@@ -260,10 +262,18 @@ public class Document {
         }
     }
 
+    /**
+     *
+     * @return amount of unique words that appear in the document
+     */
     private int uniqueWordsCount() {
         return catalogueWords.size();
     }
 
+    /**
+     *
+     * @return amount of words that appear exactly once in the document
+     */
     private int hapaxWordsCount() {
         int count = 0;
 
@@ -299,6 +309,10 @@ public class Document {
         return totalLength / docWords.length;
     }
 
+    /**
+     *
+     * @return the ratio of unique words to total words in the document
+     */
     public double uniqueWordRatio() {
         double uniqueRatio;
 
@@ -306,6 +320,10 @@ public class Document {
         return uniqueRatio;
     }
 
+    /**
+     *
+     * @return the ratio of words that appear once to the total words in the document
+     */
     public double hapaxLegomanaRatio() {
         double hapaxRatio;
         hapaxRatio = (double) hapaxWordsCount()/totalWords();
@@ -332,18 +350,35 @@ public class Document {
      * @return the sentence indexed by {@code sentence_number}
      */
     public String getSentence(int sentence_number) {
-        // TODO: Implement this method
-        return null;
+        return docSentences[sentence_number-1];
     }
 
     public double averageSentenceLength() {
-        // TODO: Implement this method
-        return 0.0;
+        double total = 0;
+        for (int i = 0; i < docSentences.length; i++) {
+            total += docSentences[i].length();
+        }
+        return total/docSentences.length;
     }
 
     public double averageSentenceComplexity() {
-        // TODO: Implement this method
-        return 0.0;
+        double total = 0;
+        for (int i = 0; i < docSentences.length; i++) {
+            total += getNumPhrases(docSentences[i]);
+        }
+        return total/docSentences.length;
+    }
+
+    public int getNumPhrases(String sentence) {
+        int count = 0;
+
+        for (int i = 1; i < sentence.length()-1; i++){
+            if ((sentence.charAt(i) == ',') || (sentence.charAt(i) == ':')|| (sentence.charAt(i) == ';')) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /* ------- Task 3 ------- */
