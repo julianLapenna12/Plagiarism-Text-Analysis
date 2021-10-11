@@ -15,6 +15,14 @@ import static cpen221.mp1.cryptanalysis.Cryptography.encrypt;
 import static cpen221.mp1.cryptanalysis.Untangler.areTangled;
 
 public class DFTTests {
-    int[] testSignal = {2,-2,2,-2,2,-2};
-
+    @Test
+    public void testDFTSize(){
+        int[] testSignal = {2,-2,2,-2,2,-2};
+        Assertions.assertEquals(dft(testSignal).length, testSignal.length);
+    }
+    @Test
+    public void testDFTConst(){
+        int[] testSignal = {2,2,2,2,2,2};
+        Assertions.assertEquals(dft(testSignal)[0].amp(), 12);
+    }
 }
