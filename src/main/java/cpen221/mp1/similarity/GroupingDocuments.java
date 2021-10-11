@@ -47,7 +47,7 @@ public class GroupingDocuments {
             pair = findNthLowestPair(comparisons, allDocuments.size(), currentGroups-1);
 
             try {
-                merge(findIndex(pair[1], groupings, allDocuments), findIndex(pair[2], groupings, allDocuments), groupings);
+                merge(findIndex((int)pair[1], groupings, allDocuments), findIndex((int)pair[2], groupings, allDocuments), groupings);
             }
             catch (Exception e){
                 System.out.println("Arrays not found");
