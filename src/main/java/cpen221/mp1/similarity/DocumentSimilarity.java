@@ -119,7 +119,7 @@ public class DocumentSimilarity {
             return 0;
         }
 
-        return word_probability * (Math.log(word_probability / average_probability));
+        return word_probability * (log2(word_probability / average_probability));
     }
 
     /**
@@ -131,5 +131,9 @@ public class DocumentSimilarity {
     private double[] getDocumentMetrics(Document doc) {
         return new double[]{doc.averageSentenceLength(), doc.averageSentenceComplexity(),
                 doc.averageWordLength(), doc.uniqueWordRatio(), doc.hapaxLegomanaRatio()};
+    }
+
+    private double log2(double number) {
+        return Math.log(number)/Math.log(2);
     }
 }
