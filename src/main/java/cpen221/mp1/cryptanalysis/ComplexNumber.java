@@ -2,7 +2,7 @@
 package cpen221.mp1.cryptanalysis;
 
 public class ComplexNumber {
-
+    //TODO add method Javadocs
     private double re;
     private double im;
 
@@ -40,8 +40,8 @@ public class ComplexNumber {
     }
 
     public String toString() {
-        // TODO: return a string representation
-        return null;
+        String rep = re + " i" + im;
+        return rep;
     }
 
     public double re() {

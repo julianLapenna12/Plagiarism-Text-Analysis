@@ -20,7 +20,7 @@ public class Task3Tests {
     @Test
     public void testSentimentPositive() {
         try {
-            Assertions.assertEquals(testDocument1.getMostPositiveSentence(), "I love Coding so much. my favorite programming language is Java because it is the best.");
+            Assertions.assertEquals(testDocument1.getMostPositiveSentence(), "i love coding so much, my favorite programming language is java because it is the best");
         } catch (NoSuitableSentenceException e) {
             e.printStackTrace();
         }
@@ -29,7 +29,7 @@ public class Task3Tests {
     @Test
     public void testSentimentNegative() {
         try {
-            Assertions.assertEquals(testDocument1.getMostNegativeSentence(), "I hate coding, its the absolute worst.");
+            Assertions.assertEquals(testDocument1.getMostNegativeSentence(), "i hate coding, its the absolute worst");
         } catch (NoSuitableSentenceException e) {
             e.printStackTrace();
             System.out.println("No suitable sentence");
@@ -38,21 +38,17 @@ public class Task3Tests {
 
     @Test
     public void testSentimentPositiveException() {
-        try {
-            System.out.println(new Document("Test String", "resources/NeutralStatement.txt").getMostPositiveSentence());
-        } catch (NoSuitableSentenceException e) {
-            e.printStackTrace();
-        }
+        Assertions.assertThrows(NoSuitableSentenceException.class, ()->{
+            new Document("Test String", "resources/NeutralStatement.txt").getMostPositiveSentence();
+        } );
     }
 
 
     @Test
     public void testSentimentNegativeException() {
-        try {
-            System.out.println(new Document("Test String", "resources/NeutralStatement.txt").getMostNegativeSentence());
-        } catch (NoSuitableSentenceException e) {
-            e.printStackTrace();
-        }
+        Assertions.assertThrows(NoSuitableSentenceException.class, ()->{
+            new Document("Test String", "resources/NeutralStatement.txt").getMostNegativeSentence();
+        } );
 
     }
 }

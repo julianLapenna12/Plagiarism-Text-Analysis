@@ -45,17 +45,16 @@ public class Document {
                 str.append(formatLineEnd(urlScanner.nextLine()));
             }
 
-            docContent = str.toString().toLowerCase();
             docID = docId;
-            //System.out.print(docContent);
+            docContent = str.toString();
         } catch (IOException ioe) {
             System.out.println("Problem reading from URL!");
         }
 
-        // TODO: Remove new-line characters and non content characters
 
-        docWords = splitWord(docContent);
         splitSentence(docContent);
+        docContent = docContent.toLowerCase();
+        docWords = splitWord(docContent);
     }
 
     /**
@@ -83,21 +82,17 @@ public class Document {
                 doc.append(fileLine);
             }
             reader.close();
-
-            docContent = doc.toString().toLowerCase();
+            docContent = doc.toString();
             docID = docId;
         } catch (IOException ioe) {
             System.out.println("Problem reading file!");
         }
 
-        docWords = splitWord(docContent);
         splitSentence(docContent);
 
-        /* test print statements
-        for (int n = 0; n < docSentences.length; n++) {
-            System.out.println(docSentences[n]);
-        }
-         */
+        docContent = docContent.toLowerCase();
+        docWords = splitWord(docContent);
+
     }
 
     /**
@@ -131,7 +126,7 @@ public class Document {
         for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
             nextSentence = content.substring(start, end);
             nextSentence = trimSentence(nextSentence);
-            sentences.add(nextSentence);
+            sentences.add(nextSentence.toLowerCase());
         }
 
         docSentences = new String[sentences.size()];

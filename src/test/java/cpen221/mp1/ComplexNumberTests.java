@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.security.KeyStore;
 
 public class ComplexNumberTests {
-
+    //TODO Add more test Cases for 100% Coverage
     @Test
     public void testAddition(){
         for (int i = -10; i <= 10; i++){
@@ -57,6 +57,11 @@ public class ComplexNumberTests {
                 Assertions.assertTrue(g.re() == 0);
             }
         }
+    }
+
+    @Test
+    public void testSeed(){
+
     }
 
 }

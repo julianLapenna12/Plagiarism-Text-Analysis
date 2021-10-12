@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SentimentAnalysis {
+    //TODO Change Implementation to use Hashmap instead
     /**
      * @param doc is a non empty document object whose sentences are analyzed
      * @return a Sentiment object with the most positive scores of all the analyzed sentences, contains the score and magnitude and the original sentence
@@ -45,7 +46,7 @@ public class SentimentAnalysis {
         return mostNegative.getSentence();
     }
 
-    //Analyzes the sentiment of each of the sentences in the list, sorts the list based on the score of each setence, then returns the list
+    //Analyzes the sentiment of each of the sentences in the list, sorts the list based on the score of each sentence, then returns the list
     private static List<SentenceAnalysis> getSentenceSentiment(cpen221.mp1.Document doc){
         try (LanguageServiceClient language = LanguageServiceClient.create()){
             Document sentence = Document.newBuilder().setType(Type.PLAIN_TEXT).build();

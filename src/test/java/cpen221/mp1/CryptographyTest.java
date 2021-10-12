@@ -28,7 +28,6 @@ public class CryptographyTest {
             padding[i] = 'a';
         }
         docContent = createDocContent(testDocument1);
-        System.out.println(docContent);
     }
 
     private static String createDocContent(Document doc){
@@ -37,6 +36,14 @@ public class CryptographyTest {
             sb.append(doc.getSentence(i) + " ");
         }
         return sb.toString();
+    }
+
+    private int[] createSeq(char[] in){
+        int[] seq  = new int[in.length];
+        for (int i = 0; i < in.length; i++){
+            seq[i] = (int) in[i];
+        }
+        return seq;
     }
 
     @Test
@@ -68,6 +75,9 @@ public class CryptographyTest {
 
     @Test
     public void testEncrypt(){
-        Assertions.assertNotEquals(encrypt(testDocument1, 256, 16, 64), docContent.substring(0,256).toCharArray());
+        Assertions.assertNotEquals(encrypt(testDocument1, 256, 16, 64), createSeq(docContent.substring(0,256).toCharArray()));
+        Assertions.assertNotEquals(encrypt(testDocument1, 256, 16, 128), createSeq(docContent.substring(0,256).toCharArray()));
+        Assertions.assertNotEquals(encrypt(testDocument1, 256, 16, 256 ), createSeq(docContent.substring(0,256).toCharArray()));
+        Assertions.assertNotEquals(encrypt(testDocument1, 256, 16, 512), createSeq(docContent.substring(0,256).toCharArray()));
     }
 }
