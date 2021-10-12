@@ -36,76 +36,76 @@ public class Task4Tests {
 
     @Test
     public void testDivergence12() {
-        Assertions.assertEquals(60.68995, docSimTest.documentDivergence(testDoc1,testDoc2),0.05);
+        Assertions.assertEquals(60.68995286, docSimTest.documentDivergence(testDoc1,testDoc2),0.05);
     }
 
     @Test
     public void testDivergence13() {
-
+        Assertions.assertEquals(49.75416181, docSimTest.documentDivergence(testDoc1,testDoc3),0.05);
     }
 
     @Test
     public void testDivergence14() {
-
+        Assertions.assertEquals(50.99783841, docSimTest.documentDivergence(testDoc1,testDoc4),0.05);
     }
 
     @Test
     public void testDivergence15() {
-
+        Assertions.assertEquals(47.77313591, docSimTest.documentDivergence(testDoc1,testDoc5),0.05);
     }
 
     @Test
     public void testDivergence16() {
-
+        Assertions.assertEquals(46.47232498, docSimTest.documentDivergence(testDoc1,testDoc6),0.05);
     }
 
     @Test
     public void testDivergence23() {
-
+        Assertions.assertEquals(54.05216097, docSimTest.documentDivergence(testDoc2,testDoc3),0.05);
     }
 
     @Test
     public void testDivergence24() {
-
+        Assertions.assertEquals(50.45192672, docSimTest.documentDivergence(testDoc2,testDoc4),0.05);
     }
 
     @Test
     public void testDivergence25() {
-
+        Assertions.assertEquals(59.61101828, docSimTest.documentDivergence(testDoc2,testDoc5),0.05);
     }
 
     @Test
     public void testDivergence26() {
-
+        Assertions.assertEquals(60.85068688, docSimTest.documentDivergence(testDoc2,testDoc6),0.05);
     }
 
     @Test
     public void testDivergence34() {
-
+        Assertions.assertEquals(62.0566864, docSimTest.documentDivergence(testDoc3,testDoc4),0.05);
     }
 
     @Test
     public void testDivergence35() {
-
+        Assertions.assertEquals(52.2069289, docSimTest.documentDivergence(testDoc3,testDoc5),0.05);
     }
 
     @Test
     public void testDivergence36() {
-
+        Assertions.assertEquals(49.52928367, docSimTest.documentDivergence(testDoc3,testDoc6),0.05);
     }
 
     @Test
     public void testDivergence45() {
-
+        Assertions.assertEquals(50.29427033, docSimTest.documentDivergence(testDoc4,testDoc5),0.05);
     }
 
     @Test
     public void testDivergence46() {
-
+        Assertions.assertEquals(57.75086168, docSimTest.documentDivergence(testDoc4,testDoc6),0.05);
     }
 
     @Test
     public void testDivergence56() {
-
+        Assertions.assertEquals(51.99519172, docSimTest.documentDivergence(testDoc5,testDoc6),0.05);
     }
 }

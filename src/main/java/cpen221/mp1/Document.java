@@ -22,7 +22,7 @@ public class Document {
     private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
     private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
-             ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
+            ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'};
 
 
     /**
@@ -52,7 +52,7 @@ public class Document {
         // TODO: Remove new-line characters and non content characters
 
         docWords = splitWord(docContent);
-        splitSentence();
+        splitSentence(docContent);
     }
 
     /**
@@ -88,7 +88,7 @@ public class Document {
         }
 
         docWords = splitWord(docContent);
-        splitSentence();
+        splitSentence(docContent);
 
         /* test print statements
         for (int n = 0; n < docSentences.length; n++) {
@@ -100,7 +100,7 @@ public class Document {
     /**
      * @return the string containing the whole document
      */
-    public String getDocContent(){
+    public String getDocContent() {
         return docContent;
     }
 
@@ -124,16 +124,16 @@ public class Document {
      *
      * @return the sentences as an array of strings
      */
-    private String[] splitSentence() {
+    private String[] splitSentence(String content) {
         List<String> sentences = new ArrayList();
         String nextSentence;
 
         BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
-        iterator.setText(docContent);
+        iterator.setText(content);
         int start = iterator.first();
 
         for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-            nextSentence = docContent.substring(start, end);
+            nextSentence = content.substring(start, end);
             nextSentence = trimSentence(nextSentence);
             sentences.add(nextSentence);
         }
@@ -239,12 +239,12 @@ public class Document {
      * @return true if the character is a special character or a space, false otherwise
      */
     private boolean checkChar(char c) {
-      for(int i = 0; i < specialChars.length ; i++){
-          if(c == specialChars[i]){
-              return true;
-          }
-      }
-      return false;
+        for (int i = 0; i < specialChars.length; i++) {
+            if (c == specialChars[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -270,7 +270,6 @@ public class Document {
     }
 
     /**
-     *
      * @return amount of unique words that appear in the document
      */
     private int uniqueWordsCount() {
@@ -278,14 +277,13 @@ public class Document {
     }
 
     /**
-     *
      * @return amount of words that appear exactly once in the document
      */
     private int hapaxWordsCount() {
         int count = 0;
 
-        for(Map.Entry<String, Integer> entry: catalogueWords.entrySet()) {
-            if(entry.getValue() == 1) count++;
+        for (Map.Entry<String, Integer> entry : catalogueWords.entrySet()) {
+            if (entry.getValue() == 1) count++;
         }
 
         return count;
@@ -317,23 +315,21 @@ public class Document {
     }
 
     /**
-     *
      * @return the ratio of unique words to total words in the document
      */
     public double uniqueWordRatio() {
         double uniqueRatio;
 
-        uniqueRatio = (double) uniqueWordsCount()/totalWords();
+        uniqueRatio = (double) uniqueWordsCount() / totalWords();
         return uniqueRatio;
     }
 
     /**
-     *
      * @return the ratio of words that appear once to the total words in the document
      */
     public double hapaxLegomanaRatio() {
         double hapaxRatio;
-        hapaxRatio = (double) hapaxWordsCount()/totalWords();
+        hapaxRatio = (double) hapaxWordsCount() / totalWords();
         return hapaxRatio;
     }
 
@@ -365,15 +361,11 @@ public class Document {
      * @return the sentence indexed by {@code sentence_number}
      */
     public String getSentence(int sentence_number) {
-        return docSentences[sentence_number-1];
+        return docSentences[sentence_number - 1];
     }
 
     public double averageSentenceLength() {
-        double total = 0;
-        for (int i = 0; i < docSentences.length; i++) {
-            total += docSentences[i].length();
-        }
-        return total/docSentences.length;
+        return ((double) docWords.length) / docSentences.length;
     }
 
     public double averageSentenceComplexity() {
@@ -381,14 +373,14 @@ public class Document {
         for (int i = 0; i < docSentences.length; i++) {
             total += getNumPhrases(docSentences[i]);
         }
-        return total/docSentences.length;
+        return total / docSentences.length;
     }
 
     public int getNumPhrases(String sentence) {
-        int count = 0;
+        int count = 1;
 
-        for (int i = 1; i < sentence.length()-1; i++){
-            if ((sentence.charAt(i) == ',') || (sentence.charAt(i) == ':')|| (sentence.charAt(i) == ';')) {
+        for (int i = 1; i < sentence.length() - 1; i++) {
+            if ((sentence.charAt(i) == ',') || (sentence.charAt(i) == ':') || (sentence.charAt(i) == ';')) {
                 count++;
             }
         }
