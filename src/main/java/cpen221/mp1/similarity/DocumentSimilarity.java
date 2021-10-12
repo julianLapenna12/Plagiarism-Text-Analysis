@@ -96,7 +96,7 @@ public class DocumentSimilarity {
      * The probability of a given word appearing in a document where probability is expressed
      * as the word's occurrences divided by the total word count
      *
-     * @param doc the document to check
+     * @param doc  the document to check
      * @param word the word for which we want the probability of appearing
      * @return the probability of a word appearing in a document, if it does not appear returns 0
      */
@@ -110,7 +110,7 @@ public class DocumentSimilarity {
     /**
      * Intermediary calculation for the JS Divergence
      *
-     * @param word_probability probability of a word appear in a document
+     * @param word_probability    probability of a word appear in a document
      * @param average_probability average probability of a word appearing in two different documents
      * @return the internal value to be summed to calculate the divergence
      */
@@ -119,7 +119,7 @@ public class DocumentSimilarity {
             return 0;
         }
 
-        return word_probability * (Math.log(word_probability / average_probability));
+        return word_probability * (log2(word_probability / average_probability));
     }
 
     /**
@@ -129,7 +129,11 @@ public class DocumentSimilarity {
      * @return the metrics calculated in tasks 1 and 2 for given document
      */
     private double[] getDocumentMetrics(Document doc) {
-        return new double[] {doc.averageSentenceLength(), doc.averageSentenceComplexity(),
+        return new double[]{doc.averageSentenceLength(), doc.averageSentenceComplexity(),
                 doc.averageWordLength(), doc.uniqueWordRatio(), doc.hapaxLegomanaRatio()};
+    }
+
+    private double log2(double number) {
+        return Math.log(number)/Math.log(2);
     }
 }

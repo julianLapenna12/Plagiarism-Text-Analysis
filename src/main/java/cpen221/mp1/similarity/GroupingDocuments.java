@@ -14,8 +14,9 @@ public class GroupingDocuments {
 
     /**
      * Group documents by similarity
-     * @param allDocuments the set of all documents to be considered,
-     *                     is not null
+     *
+     * @param allDocuments   the set of all documents to be considered,
+     *                       is not null
      * @param numberOfGroups the number of document groups to be generated
      * @return groups of documents, where each group (set) contains similar
      * documents following this rule: if D_i is in P_x, and P_x contains at
@@ -27,7 +28,7 @@ public class GroupingDocuments {
         // TODO: Implement this method
         ArrayList<Set<Document>> groupings = new ArrayList<Set<Document>>();
         Set<Document> group = new HashSet<Document>();
-        double [] pair = new double[3];
+        double[] pair = new double[3];
         int currentGroups = 1;
 
         DocumentSimilarity docSim = new DocumentSimilarity();
@@ -40,18 +41,17 @@ public class GroupingDocuments {
             }
         }
 
-        for(int i = 0; i < allDocuments.size(); i++) {
+        for (int i = 0; i < allDocuments.size(); i++) {
             group.add((Document) allDocuments.toArray()[i]);
             groupings.add(i, group);
         }
 
         while (currentGroups < numberOfGroups) {
-            pair = findNthLowestPair(comparisons, allDocuments.size(), currentGroups-1);
+            pair = findNthLowestPair(comparisons, allDocuments.size(), currentGroups - 1);
 
             try {
-                merge(findIndex((int)pair[1], groupings, allDocuments), findIndex((int)pair[2], groupings, allDocuments), groupings);
-            }
-            catch (Exception e){
+                merge(findIndex((int) pair[1], groupings, allDocuments), findIndex((int) pair[2], groupings, allDocuments), groupings);
+            } catch (Exception e) {
                 System.out.println("Arrays not found");
             }
 
@@ -62,7 +62,7 @@ public class GroupingDocuments {
     }
 
     private static double[] findNthLowestPair(double[][] pairs, int size, int pairNum) {
-        double [] smallest = {1, 1, 1}; //first index is for value of comparison, next two are for indexes of comparison
+        double[] smallest = {1, 1, 1}; //first index is for value of comparison, next two are for indexes of comparison
         for (int m = 0; m < pairNum; m++) {
             for (int i = 0; i < size; i++) {
                 for (int j = i; j < size; j++) {
@@ -73,7 +73,7 @@ public class GroupingDocuments {
                     }
                 }
             }
-            pairs[(int)smallest[1]][(int)smallest[2]] = 1;
+            pairs[(int) smallest[1]][(int) smallest[2]] = 1;
             smallest[0] = 1;
         }
         return smallest;
