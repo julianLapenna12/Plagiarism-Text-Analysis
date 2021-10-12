@@ -30,11 +30,13 @@ public class GroupingDocuments {
         double [] pair = new double[3];
         int currentGroups = 1;
 
+        DocumentSimilarity docSim = new DocumentSimilarity();
+
         double [][] comparisons = new double[allDocuments.size()][allDocuments.size()];
 
         for(int i = 0; i < allDocuments.size(); i++) {
             for(int j = i; j < allDocuments.size(); j++) {
-                //comparisons[i][j] = DocumentSimilarity.documentDivergence((Document) allDocuments.toArray()[i],(Document) allDocuments.toArray()[j]);
+                comparisons[i][j] = docSim.documentDivergence((Document) allDocuments.toArray()[i],(Document) allDocuments.toArray()[j]);
             }
         }
 

@@ -23,6 +23,8 @@ public class Document {
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
     private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
              ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
+    private final int LETTERA = 64;
+    private final int LETTERZ = 123;
 
 
     /**
@@ -73,7 +75,7 @@ public class Document {
             for (String fileLine = reader.readLine(); fileLine != null; fileLine = reader.readLine()) {
                 //adding in the space if last character in the line is a letter
                 if (fileLine.length() != 0) {
-                    if (((int) fileLine.charAt(fileLine.length() - 1)) > 64 && ((int) fileLine.charAt(fileLine.length() - 1)) < 123) {
+                    if (((int) fileLine.charAt(fileLine.length() - 1)) > LETTERA && ((int) fileLine.charAt(fileLine.length() - 1)) < LETTERZ) {
                         fileLine = fileLine + " ";
                     }
                 }
@@ -362,11 +364,7 @@ public class Document {
     }
 
     public double averageSentenceLength() {
-        double total = 0;
-        for (int i = 0; i < docSentences.length; i++) {
-            total += docSentences[i].length();
-        }
-        return total/docSentences.length;
+        return ((double) docWords.length)/docSentences.length;
     }
 
     public double averageSentenceComplexity() {
@@ -377,8 +375,8 @@ public class Document {
         return total/docSentences.length;
     }
 
-    public int getNumPhrases(String sentence) {
-        int count = 0;
+    private int getNumPhrases(String sentence) {
+        int count = 1;
 
         for (int i = 1; i < sentence.length()-1; i++){
             if ((sentence.charAt(i) == ',') || (sentence.charAt(i) == ':')|| (sentence.charAt(i) == ';')) {
