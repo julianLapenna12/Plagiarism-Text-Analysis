@@ -24,7 +24,7 @@ public class Task1SmokeTests {
     @Test
     public void testAvgSentenceLength() {
         System.out.println(testDocument1.averageSentenceLength());
-        //Assertions.assertEquals(10.027, testDocument1.averageSentenceLength(), 0.005);
+        Assertions.assertEquals(10.027, testDocument1.averageSentenceLength(), 0.005);
     }
 
     @Test
