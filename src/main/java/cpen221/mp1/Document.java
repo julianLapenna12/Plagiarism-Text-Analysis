@@ -98,13 +98,6 @@ public class Document {
     }
 
     /**
-     * @return the string containing the whole document
-     */
-    public String getDocContent(){
-        return docContent;
-    }
-
-    /**
      * Formats the end of a line with a space if it doesn't end with a space or hyphen
      *
      * @param line the String to be formatted
@@ -422,7 +415,7 @@ public class Document {
      *                                     expresses a positive sentiment
      */
     public String getMostPositiveSentence() throws NoSuitableSentenceException {
-        return SentimentAnalysis.getMostPositiveSentence(docSentences);
+        return SentimentAnalysis.getMostPositiveSentence(this);
     }
 
     /**
@@ -435,6 +428,6 @@ public class Document {
      *                                     expresses a negative sentiment
      */
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
-        return SentimentAnalysis.getMostNegativeSentence(docSentences);
+        return SentimentAnalysis.getMostNegativeSentence(this);
     }
 }

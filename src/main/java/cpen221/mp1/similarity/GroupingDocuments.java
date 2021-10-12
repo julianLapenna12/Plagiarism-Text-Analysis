@@ -34,7 +34,7 @@ public class GroupingDocuments {
 
         for(int i = 0; i < allDocuments.size(); i++) {
             for(int j = i; j < allDocuments.size(); j++) {
-                comparisons[i][j] = DocumentSimilarity.documentDivergence((Document) allDocuments.toArray()[i],(Document) allDocuments.toArray()[j]);
+                //comparisons[i][j] = DocumentSimilarity.documentDivergence((Document) allDocuments.toArray()[i],(Document) allDocuments.toArray()[j]);
             }
         }
 

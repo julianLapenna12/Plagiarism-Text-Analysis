@@ -40,7 +40,7 @@ public class Cryptography {
     }
 
     private static char[] createEncryptSeq(Document doc, int length){
-        String content = doc.getDocContent();
+        String content = createDocContent(doc);
         if(content.length() < length){
             char[] padding = new char[length - content.length()];
             for (int i  = 0; i < padding.length; i++) {
@@ -51,6 +51,14 @@ public class Cryptography {
         else{
             return content.substring(0, length).toCharArray();
         }
+    }
+
+    private static String createDocContent(Document doc){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i <= doc.numSentences(); i++){
+            sb.append(doc.getSentence(i) + " ");
+        }
+        return sb.toString();
     }
 
     /**
