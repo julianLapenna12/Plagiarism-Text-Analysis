@@ -2,9 +2,8 @@ package cpen221.mp1.similarity;
 
 import cpen221.mp1.Document;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.text.BreakIterator;
+import java.util.*;
 
 public class DocumentSimilarity {
 
@@ -19,6 +18,11 @@ public class DocumentSimilarity {
 
     private Set<String> allWords = new HashSet<>();
     private final int DIV_COMPARISONS = 5;
+    private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
+            ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
+    private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
+    private String[] doc1Words;
+    private String[] doc2Words;
 
     /* ------- Task 4 ------- */
 
@@ -69,6 +73,9 @@ public class DocumentSimilarity {
         double[] doc1_metrics = getDocumentMetrics(doc1);
         double[] doc2_metrics = getDocumentMetrics(doc2);
 
+        doc1Words = splitWord(createDocContent(doc1));
+        doc2Words = splitWord(createDocContent(doc2));
+
         for (int i = 0; i < DIV_COMPARISONS; i++) {
             totalDivergence += weights[i] * Math.abs(doc1_metrics[i] - doc2_metrics[i]);
         }
@@ -85,7 +92,7 @@ public class DocumentSimilarity {
      * @param doc the document from which to add words
      */
     private void collectWords(Document doc) {
-        for (String word : doc.getDocWords()) {
+        for (String word : splitWord(createDocContent(doc))) {
             if (!allWords.contains(word)) {
                 allWords.add(word);
             }
@@ -101,8 +108,8 @@ public class DocumentSimilarity {
      * @return the probability of a word appearing in a document, if it does not appear returns 0
      */
     private double wordProbability(Document doc, String word) {
-        if (Arrays.asList(doc.getDocWords()).contains(word)) {
-            return (double) doc.getCatalogueWords().get(word) / doc.totalWords();
+        if (Arrays.asList(splitWord(createDocContent(doc))).contains(word)) {
+            return (double) doc.getCatalogueWords().get(word) / totalWords(doc);
         }
         return 0.0;
     }
@@ -135,5 +142,82 @@ public class DocumentSimilarity {
 
     private double log2(double number) {
         return Math.log(number)/Math.log(2);
+    }
+
+    private String[] splitWord(String content) {
+
+        String text = content; // the text to split into sentences
+        BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
+        iterator.setText(text);
+        int start = iterator.first();
+        ArrayList<String> docWords = new ArrayList<>();
+
+        for (int end = iterator.next();
+             end != BreakIterator.DONE;
+             start = end, end = iterator.next()) {
+
+            String word = text.substring(start, end);
+            //word = trimWord(word);
+
+            if (trimWord(word) != "") {
+                docWords.add(trimWord(word));
+                classifyWord(trimWord(word));
+                //System.out.println(trimWord(word));
+            }
+
+        }
+
+        String[] arrayOfWords = new String[docWords.size()];
+
+        for (int i = 0; i < docWords.size(); i++) {
+            arrayOfWords[i] = docWords.get(i);
+        }
+
+        return arrayOfWords;
+    }
+
+    private String trimWord(String input) {
+        String output = input;
+
+        if (output.length() == 0) {
+            return "";
+        } else if (checkChar(output.charAt(0))) {
+            output = output.substring(1);
+            output = trimWord(output);
+        } else if (checkChar(output.charAt(output.length() - 1))) {
+            output = output.substring(0, output.length() - 1);
+            output = trimWord(output);
+        }
+
+        return output;
+    }
+
+    private boolean checkChar(char c) {
+        for (int i = 0; i < specialChars.length; i++) {
+            if (c == specialChars[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void classifyWord(String word) {
+        if (catalogueWords.containsKey(word)) {
+            catalogueWords.put(word, catalogueWords.get(word) + 1);
+        } else {
+            catalogueWords.put(word, 1);
+        }
+    }
+
+    private static String createDocContent(Document doc){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i <= doc.numSentences(); i++){
+            sb.append(doc.getSentence(i) + " ");
+        }
+        return sb.toString();
+    }
+
+    private double totalWords(Document doc) {
+        return splitWord(createDocContent(doc)).length;
     }
 }
