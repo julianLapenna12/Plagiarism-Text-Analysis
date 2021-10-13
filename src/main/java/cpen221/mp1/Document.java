@@ -21,6 +21,8 @@ public class Document {
     private String[] docWords;
     private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
+    private String mostPositiveSentence;
+    private String mostNegativeSentence;
     private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
              ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
     private final int LETTERA = 64;
@@ -55,6 +57,7 @@ public class Document {
         splitSentence(docContent);
         docContent = docContent.toLowerCase();
         docWords = splitWord(docContent);
+
     }
 
     /**
@@ -406,7 +409,10 @@ public class Document {
      *                                     expresses a positive sentiment
      */
     public String getMostPositiveSentence() throws NoSuitableSentenceException {
-        return SentimentAnalysis.getMostPositiveSentence(this);
+        if(mostPositiveSentence == null){
+           mostPositiveSentence  = SentimentAnalysis.getMostPositiveSentence(this);
+        }
+        return mostPositiveSentence;
     }
 
     /**
@@ -419,6 +425,10 @@ public class Document {
      *                                     expresses a negative sentiment
      */
     public String getMostNegativeSentence() throws NoSuitableSentenceException {
-        return SentimentAnalysis.getMostNegativeSentence(this);
+        if(mostNegativeSentence == null){
+            mostNegativeSentence  = SentimentAnalysis.getMostNegativeSentence(this);
+        }
+        return mostNegativeSentence;
+
     }
 }

@@ -72,7 +72,7 @@ public class Cryptography {
     private static String createDocContent(Document doc){
         StringBuilder sb = new StringBuilder();
         for(int i = 1; i <= doc.numSentences(); i++){
-            sb.append(doc.getSentence(i) + " ");
+            sb.append(doc.getSentence(i) + " 33");
         }
         return sb.toString();
     }
