@@ -1,7 +1,6 @@
 package cpen221.mp1;
 
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
-import cpen221.mp1.sentiments.SentenceAnalysis;
 import cpen221.mp1.sentiments.SentimentAnalysis;
 import cpen221.mp1.similarity.DocumentSimilarity;
 import org.junit.jupiter.api.Assertions;
@@ -51,7 +50,7 @@ public class Task4Tests {
 
     @Test
     public void testDivergence15() {
-        Assertions.assertEquals(47.77313591, docSimTest.documentDivergence(testDoc1,testDoc5),0.05);
+        Assertions.assertEquals(47.57688591, docSimTest.documentDivergence(testDoc1,testDoc5),0.05);
     }
 
     @Test
@@ -71,7 +70,7 @@ public class Task4Tests {
 
     @Test
     public void testDivergence25() {
-        Assertions.assertEquals(59.61101828, docSimTest.documentDivergence(testDoc2,testDoc5),0.05);
+        Assertions.assertEquals(59.41476828, docSimTest.documentDivergence(testDoc2,testDoc5),0.05);
     }
 
     @Test
@@ -86,7 +85,7 @@ public class Task4Tests {
 
     @Test
     public void testDivergence35() {
-        Assertions.assertEquals(52.2069289, docSimTest.documentDivergence(testDoc3,testDoc5),0.05);
+        Assertions.assertEquals(52.0106789, docSimTest.documentDivergence(testDoc3,testDoc5),0.05);
     }
 
     @Test
@@ -96,7 +95,7 @@ public class Task4Tests {
 
     @Test
     public void testDivergence45() {
-        Assertions.assertEquals(50.29427033, docSimTest.documentDivergence(testDoc4,testDoc5),0.05);
+        Assertions.assertEquals(50.09802033, docSimTest.documentDivergence(testDoc4,testDoc5),0.05);
     }
 
     @Test
@@ -106,6 +105,6 @@ public class Task4Tests {
 
     @Test
     public void testDivergence56() {
-        Assertions.assertEquals(51.99519172, docSimTest.documentDivergence(testDoc5,testDoc6),0.05);
+        Assertions.assertEquals(52.19144172, docSimTest.documentDivergence(testDoc5,testDoc6),0.05);
     }
 }

@@ -1,7 +1,6 @@
 package cpen221.mp1;
 
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
-import cpen221.mp1.sentiments.SentenceAnalysis;
 import cpen221.mp1.sentiments.SentimentAnalysis;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,7 +23,7 @@ public class Task1SmokeTests {
     @Test
     public void testAvgSentenceLength() {
         System.out.println(testDocument1.averageSentenceLength());
-        //Assertions.assertEquals(10.027, testDocument1.averageSentenceLength(), 0.005);
+        Assertions.assertEquals(10.027, testDocument1.averageSentenceLength(), 0.005);
     }
 
     @Test
