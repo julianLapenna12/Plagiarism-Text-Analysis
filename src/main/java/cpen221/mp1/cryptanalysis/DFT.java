@@ -2,9 +2,16 @@ package cpen221.mp1.cryptanalysis;
 
 import org.checkerframework.checker.units.qual.C;
 
+/**
+ * DFT has methods for doing fourier transforms on various sets of data, allowing for frequency analysis.
+ * @Author Joel Tsuchitori
+ */
 public class DFT {
-    /*
-     * Calculates the Discrete Fourier transform of a sequence of complex number
+
+    /**
+     * dft runs a discrete fourier transform on a array of complex numbers, breaking down the array to its component frequencies.
+     * @param inSignal is an array of complex numbers which the discrete fourier transform is run on
+     * @return an array of complex values with same size as inSignal, corresponding to inSignal's equivalent fourier series
      */
     public static ComplexNumber[] dft(ComplexNumber[] inSignal) {
         ComplexNumber[] transform  = new ComplexNumber[inSignal.length];
@@ -20,6 +27,11 @@ public class DFT {
         return transform;
     }
 
+    /**
+     * dft runs a discrete fourier transform on a array of integers, breaking down the array to its component frequencies.
+     * @param inSignal is an array of integers which the discrete fourier transform is run on
+     * @return an array of complex values with same size as inSignal, corresponding to inSignal's equivalent fourier series
+     */
     public static ComplexNumber[] dft(int[] inSignal) {
         ComplexNumber[] inSignalComplex  = new ComplexNumber[inSignal.length];
         for(int i = 0; i < inSignal.length; i++){

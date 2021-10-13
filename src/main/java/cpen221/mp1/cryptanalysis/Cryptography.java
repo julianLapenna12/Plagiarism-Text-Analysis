@@ -6,9 +6,13 @@ import java.util.Random;
 
 import static cpen221.mp1.cryptanalysis.DFT.dft;
 
+/**
+ * Class for encrypting and decrypting documents
+ * @Author Joel Tsuchitori
+ */
 public class Cryptography {
 
-    private static final char paddingChar = 'a';
+    private static final char PADDING_CHAR = 'a';
 
     /**
      * Encrypt a document by replacing the i-th character, c_i, with
@@ -39,12 +43,19 @@ public class Cryptography {
         return encrypted;
     }
 
+    /**
+     * Creates an array of characters of specified length from the content of a document, trimming data off the end or adding filler characters where necessary.
+     * @param doc is a Document object which contains least 1 sentence from which a sequence will be created
+     * @param length is the length of the array which will be created from the document, can be longer or shorter than size of the document,
+     *               however must be larger than 0.
+     * @return an array of characters f specified length, where the end has been trimmed or extra characters added as necessary.
+     */
     private static char[] createEncryptSeq(Document doc, int length){
         String content = createDocContent(doc);
         if(content.length() < length){
             char[] padding = new char[length - content.length()];
             for (int i  = 0; i < padding.length; i++) {
-                padding[i] = paddingChar;
+                padding[i] = PADDING_CHAR;
             }
             return content.concat(new String(padding)).toCharArray();
         }
@@ -53,6 +64,11 @@ public class Cryptography {
         }
     }
 
+    /**
+     * Creatres a string of the whole document from an instance of Document.
+     * @param doc is a document with at least 1 sentence.
+     * @return a string containing every sentence of the doc concatenated with spaces in between each sentence.
+     */
     private static String createDocContent(Document doc){
         StringBuilder sb = new StringBuilder();
         for(int i = 1; i <= doc.numSentences(); i++){

@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sentiment analysis connects with the Google cloud natural language API and uses it to analyze the sentiment of a document.
+ * @Author Joel Tsuchitori
+ */
 public class SentimentAnalysis {
-    //TODO Change Implementation to use Hashmap instead
     /**
-     * @param doc is a non empty document object whose sentences are analyzed
+     * getMostPositiveSentence connects to the Google natural language API on the cloud and uses it to find the most positive sentence determined from Google's algorithm.
+     * @param doc is a non-empty document object whose sentences are analyzed
      * @return a Sentiment object with the most positive scores of all the analyzed sentences, contains the score and magnitude and the original sentence
      * @throws NoSuitableSentenceException when there is no sentence with positive sentiment
      */
@@ -29,6 +33,7 @@ public class SentimentAnalysis {
     }
 
     /**
+     * getMostNegativeSentence connects to the Google natural language API on the cloud and uses it to find the most negative sentence determined from Google's algorithm.
      * @param doc is a non empty document object whose sentences are analyzed
      * @return a Sentiment object with the most negative scores of all the analyzed sentences, contains the score and magnitude and the original sentence
      * @throws NoSuitableSentenceException when there is no sentence with negative sentiment
@@ -46,7 +51,12 @@ public class SentimentAnalysis {
         return mostNegative.getSentence();
     }
 
-    //Analyzes the sentiment of each of the sentences in the list, sorts the list based on the score of each sentence, then returns the list
+    /**
+     * getSentenceSentiment attempts to connect to the Google Natural Language API and then analyzes every sentence in a given document if successful.
+     * @param doc is a Document with at least one sentence from which each sentence will be analyzed.
+     * @return a list of SentenceAnalysis, each of which contains a score and magnitude corresponding to the emotional content of the sentence, and the text of the sentence.
+     * The score represents how positive or how negative the sentiment of the sentence is, while the magnitude corresponds to the strength of that feeling.
+     */
     private static List<SentenceAnalysis> getSentenceSentiment(cpen221.mp1.Document doc){
         try (LanguageServiceClient language = LanguageServiceClient.create()){
             Document sentence = Document.newBuilder().setType(Type.PLAIN_TEXT).build();
