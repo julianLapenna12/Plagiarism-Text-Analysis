@@ -19,7 +19,7 @@ public class Document {
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
-    private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
+    //private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
     private String mostPositiveSentence;
     private String mostNegativeSentence;
@@ -68,10 +68,7 @@ public class Document {
      *                 the document
      */
     public Document(String docId, String fileName) {
-        // TODO: Implement this constructor
-
         try {
-
             StringBuilder doc = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -223,7 +220,6 @@ public class Document {
         }
 
         return output;
-
     }
 
     /**
@@ -246,7 +242,7 @@ public class Document {
      *
      * @return double value of word count in the doc
      */
-    public double totalWords() {
+    private double totalWords() {
         return docWords.length;
     }
 
@@ -327,14 +323,6 @@ public class Document {
         return hapaxRatio;
     }
 
-    public String[] getDocWords() {
-        return docWords;
-    }
-
-    public TreeMap<String, Integer> getCatalogueWords() {
-        return catalogueWords;
-    }
-
     /* ------- Task 2 ------- */
 
     /**
@@ -370,7 +358,7 @@ public class Document {
         return total / docSentences.length;
     }
 
-
+    //TODO : George javadocks comments
     private int getNumPhrases(String sentence) {
         int count = 1;
 
