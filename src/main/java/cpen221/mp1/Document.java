@@ -65,10 +65,7 @@ public class Document {
      *                 the document
      */
     public Document(String docId, String fileName) {
-        // TODO: Implement this constructor
-
         try {
-
             StringBuilder doc = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -323,10 +320,6 @@ public class Document {
         return hapaxRatio;
     }
 
-    public TreeMap<String, Integer> getCatalogueWords() {
-        return catalogueWords;
-    }
-
     /* ------- Task 2 ------- */
 
     /**
@@ -362,7 +355,7 @@ public class Document {
         return total / docSentences.length;
     }
 
-
+    //TODO : George javadocks comments
     private int getNumPhrases(String sentence) {
         int count = 1;
 

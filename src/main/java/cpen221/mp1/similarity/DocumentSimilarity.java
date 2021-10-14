@@ -20,7 +20,8 @@ public class DocumentSimilarity {
     private final int DIV_COMPARISONS = 5;
     private final char[] specialChars = {' ', '!', '"', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
             ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}','~'};
-    private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
+    private HashMap<Document, TreeMap<String, Integer>> wordCounts = new HashMap<>();
+    private HashMap<Document, String[]> docWords = new HashMap<>();
     private String[] doc1Words;
     private String[] doc2Words;
 
@@ -41,9 +42,9 @@ public class DocumentSimilarity {
         double p_i, q_i, m_i, div_p, div_q, divergenceSum = 0;
 
         for (String word : allWords) {
+
             p_i = wordProbability(doc1, word);
             q_i = wordProbability(doc2, word);
-
             m_i = (p_i + q_i) / 2;
 
             div_p = divergenceLog(p_i, m_i);
@@ -73,8 +74,14 @@ public class DocumentSimilarity {
         double[] doc1_metrics = getDocumentMetrics(doc1);
         double[] doc2_metrics = getDocumentMetrics(doc2);
 
-        doc1Words = splitWord(createDocContent(doc1));
-        doc2Words = splitWord(createDocContent(doc2));
+        wordCounts.put(doc1, new TreeMap<>());
+        wordCounts.put(doc2, new TreeMap<>());
+
+        doc1Words = splitWord(doc1, createDocContent(doc1));
+        doc2Words = splitWord(doc2, createDocContent(doc2));
+
+        docWords.put(doc1, doc1Words);
+        docWords.put(doc2, doc2Words);
 
         for (int i = 0; i < DIV_COMPARISONS; i++) {
             totalDivergence += weights[i] * Math.abs(doc1_metrics[i] - doc2_metrics[i]);
@@ -92,7 +99,7 @@ public class DocumentSimilarity {
      * @param doc the document from which to add words
      */
     private void collectWords(Document doc) {
-        for (String word : splitWord(createDocContent(doc))) {
+        for (String word : docWords.get(doc)) {
             if (!allWords.contains(word)) {
                 allWords.add(word);
             }
@@ -108,8 +115,10 @@ public class DocumentSimilarity {
      * @return the probability of a word appearing in a document, if it does not appear returns 0
      */
     private double wordProbability(Document doc, String word) {
-        if (Arrays.asList(splitWord(createDocContent(doc))).contains(word)) {
-            return (double) doc.getCatalogueWords().get(word) / totalWords(doc);
+
+        if (Arrays.asList(docWords.get(doc)).contains(word)) {
+            int occurances = wordCounts.get(doc).get(word);
+            return (double) occurances / totalWords(doc);
         }
         return 0.0;
     }
@@ -144,7 +153,7 @@ public class DocumentSimilarity {
         return Math.log(number)/Math.log(2);
     }
 
-    private String[] splitWord(String content) {
+    private String[] splitWord(Document doc, String content) {
 
         String text = content; // the text to split into sentences
         BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
@@ -161,7 +170,7 @@ public class DocumentSimilarity {
 
             if (trimWord(word) != "") {
                 docWords.add(trimWord(word));
-                classifyWord(trimWord(word));
+                classifyWord(doc, trimWord(word));
                 //System.out.println(trimWord(word));
             }
 
@@ -201,11 +210,11 @@ public class DocumentSimilarity {
         return false;
     }
 
-    private void classifyWord(String word) {
-        if (catalogueWords.containsKey(word)) {
-            catalogueWords.put(word, catalogueWords.get(word) + 1);
+    private void classifyWord(Document doc, String word) {
+        if (wordCounts.get(doc).containsKey(word)) {
+            wordCounts.get(doc).put(word, wordCounts.get(doc).get(word) + 1);
         } else {
-            catalogueWords.put(word, 1);
+            wordCounts.get(doc).put(word, 1);
         }
     }
 
@@ -218,6 +227,7 @@ public class DocumentSimilarity {
     }
 
     private double totalWords(Document doc) {
-        return splitWord(createDocContent(doc)).length;
+        double totalWords = docWords.get(doc).length;
+        return totalWords;
     }
 }
