@@ -56,6 +56,12 @@ public class Untangler {
         return charList;
     }
 
+    /**
+     * createRepition creates a list of characters corresponding to the prefix of a specified length of a repeating message.
+     * @param seed is the message from which will be repeated to create the prefix.
+     * @param length is the number of charachters which the prefix of the repetition will contain.
+     * @return a list of characters representing a prefix of the repeated message of specified length.
+     */
     private static ArrayList<Character> createRepetition(String seed, int length){
         char[] repetition = new char[length];
         char[] seedSeq = seed.toCharArray();

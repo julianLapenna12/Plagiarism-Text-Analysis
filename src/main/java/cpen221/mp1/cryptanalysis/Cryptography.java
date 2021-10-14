@@ -65,14 +65,14 @@ public class Cryptography {
     }
 
     /**
-     * Creatres a string of the whole document from an instance of Document.
+     * Creates a string of the whole document from an instance of Document.
      * @param doc is a document with at least 1 sentence.
      * @return a string containing every sentence of the doc concatenated with spaces in between each sentence.
      */
     private static String createDocContent(Document doc){
         StringBuilder sb = new StringBuilder();
         for(int i = 1; i <= doc.numSentences(); i++){
-            sb.append(doc.getSentence(i) + " 33");
+            sb.append(doc.getSentence(i) + " ");
         }
         return sb.toString();
     }

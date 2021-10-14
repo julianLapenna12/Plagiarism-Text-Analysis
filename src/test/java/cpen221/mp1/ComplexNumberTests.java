@@ -61,7 +61,18 @@ public class ComplexNumberTests {
 
     @Test
     public void testSeed(){
+        ComplexNumber a = new ComplexNumber(1,1);
+        Assertions.assertEquals(new ComplexNumber(a), a);
+    }
 
+    @Test
+    public void testHash(){
+        for(int i = -10; i < 10; i++){
+            ComplexNumber a = new ComplexNumber(i,i);
+            ComplexNumber b = new ComplexNumber(i,i);
+            Assertions.assertEquals(a.hashCode(), b.hashCode());
+
+        }
     }
 
 }
