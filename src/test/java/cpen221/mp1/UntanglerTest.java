@@ -40,4 +40,18 @@ public class UntanglerTest {
         Assertions.assertTrue(areTangled("TheJumpedOverTheLazyDogQuickJumpedOverTheLazyDogBrownFoJumpedOverTh", seq1, seq2));
     }
 
+    @Test
+    public void testSharedChar(){
+        String seq1 = "Sentence";
+        String seq2= "String";
+        Assertions.assertTrue(areTangled("SenStringtence", seq2, seq1));
+    }
+
+    @Test
+    public void testDualShardString(){
+        String seq1 = "abc8zhi";
+        String seq2 = "ade8lma";
+        Assertions.assertTrue(areTangled("adeabc8zhi8lma", seq1, seq2));
+    }
+
 }

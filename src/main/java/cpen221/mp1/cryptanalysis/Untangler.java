@@ -29,16 +29,42 @@ public class Untangler {
     public static boolean areTangled(String superposition, String src1, String src2) {
         ArrayList<Character> superList = makeCharList(superposition);
         ArrayList<Character> src1List = makeCharList(src1);
+        ArrayList<Character> src2List = makeCharList(src2);
         int j = 0;
+        int k = 0;
         for(int i = 0; i < superList.size(); i++){
-            if(superList.get(i).equals(src1List.get(j))){
+            if(superList.get(i).equals(src1List.get(j)) && !superList.get(i).equals(src2List.get(k))){
                 superList.remove(i);
                 j++;
                 i--;
                 j = j % src1.length();
             }
+            else if(superList.get(i).equals(src2List.get(k)) && !superList.get(i).equals(src1List.get(j))){
+                superList.remove(i);
+                k++;
+                i--;
+                k = k % src2.length();
+            }
+            //If the letter is shared by the two sequences, then checks down the the next characters until there is no tie, and then takes the letter from that one.
+            else if(superList.get(i).equals(src2List.get(k)) && superList.get(i).equals(src1List.get(j))){
+                superList.remove(i);
+                i--;
+
+                for(Character compare : superList){
+                    if(compare.equals(src1List.get((j + 1) % src1.length()))){
+                        j++;
+                        j = j % src1.length();
+                        break;
+                    }
+                    else if (compare.equals(src2List.get((k + 1) % src2.length()))){
+                        k++;
+                        k = k % src2.length();
+                        break;
+                    }
+                }
+            }
         }
-        return createRepetition(src2, superList.size()).equals(superList) && superList.size() != 0;
+        return superList.size() == 0;
     }
 
     /**
@@ -54,20 +80,5 @@ public class Untangler {
             charList.add(i);
         }
         return charList;
-    }
-
-    /**
-     * createRepition creates a list of characters corresponding to the prefix of a specified length of a repeating message.
-     * @param seed is the message from which will be repeated to create the prefix.
-     * @param length is the number of charachters which the prefix of the repetition will contain.
-     * @return a list of characters representing a prefix of the repeated message of specified length.
-     */
-    private static ArrayList<Character> createRepetition(String seed, int length){
-        char[] repetition = new char[length];
-        char[] seedSeq = seed.toCharArray();
-        for(int i = 0; i < length; i++){
-            repetition[i] = seedSeq[i % seed.length()];
-        }
-        return  makeCharList(new String(repetition));
     }
 }
