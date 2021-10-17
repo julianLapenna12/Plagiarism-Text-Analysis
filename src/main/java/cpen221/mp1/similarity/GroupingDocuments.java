@@ -85,17 +85,11 @@ public class GroupingDocuments {
     /**
      * Finds the Nth lowest value in a 2D array of type double
      *
-     * requires array to have values above 0
-     * requires array to have the same number of rows and columns
-     * requires array to only have values when the column is greater than the row NOTE: this means
-     * no arrays of size 1, only 2 or greater
-     * requires array to not be null
-     * requires number of array values to be smaller or equal to the number of values in the array
-     *
-     *
-     * @param pairs is the array for which the method is searching
+     * @param pairs is the array for which the method is searching.  Array needs to have values above or equal to 0, have the same
+     *              number of rows and columns, and only to provide values when the column is greater than the row - means no
+     *              arrays of size 1, only of size 2 or greater.
      * @param pairNum is N, which is used to indicate returning the Nth lowest number,
-     *                rather than just the lowest
+     *                rather than just the lowest.  Must be lower than or equal to the number of values in the array
      * @returns A double array of size 3 with the Nth lowest value as the first index, and the index of
      * that value within the given array as the second and third indecies.
     */
@@ -156,13 +150,9 @@ public class GroupingDocuments {
     /**
      * Merges two sets in a list of sets
      *
-     * requires both indecies to be different, more than 1, and less than or equal to the length
-     * of the list
-     * requires list of sets to have at least 2 elements
-     *
-     * @param index1 Index of the first set
-     * @param index2 Index of the second set
-     * @param groups List of sets
+     * @param index1 Index of the first set, greater than or equal to 0 and less than the length of the list
+     * @param index2 Index of the second set, greater than or equal to 0, and less than the length of the list
+     * @param groups List of sets, must have at least 2 elements
      */
     private static void merge(int index1, int index2, ArrayList<Set<Document>> groups) {
         int [] indecies = new int[2];
@@ -194,10 +184,9 @@ public class GroupingDocuments {
 
     /**
      * Orders two integers from lowest to highest
-     * requires integers cannot be null
      *
-     * @param num1 First integer to be ordered
-     * @param num2 Second integer to be ordered
+     * @param num1 First integer to be ordered, cannot be null
+     * @param num2 Second integer to be ordered, cannot be null
      * @return An integer array of size 2 ordered lowest to highest
      *
      */
