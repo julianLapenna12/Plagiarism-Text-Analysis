@@ -5,7 +5,7 @@
 #Contributions
 
 ##Tasks:
-* ####Task 2
+* ####Task 1
 * ####Task 5 + testing
 
 ##Classes:

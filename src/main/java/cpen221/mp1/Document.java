@@ -32,6 +32,9 @@ public class Document {
     /**
      * Create a new document using a URL
      *
+     * Requires the document be written in standard US/Canadian English, specifically using the Basic
+     * Latin Unicode character set
+     *
      * @param docId  the document identifier
      * @param docURL the URL with the contents of the document
      */
@@ -61,6 +64,9 @@ public class Document {
 
     /**
      * Create a new document using a file and the filename
+     *
+     * Requires the document be written in standard US/Canadian English, specifically using the Basic
+     * Latin Unicode character set
      *
      * @param docId    the document identifier
      * @param fileName the name of the file with the contents of
@@ -246,7 +252,7 @@ public class Document {
     }
 
     /**
-     * Adds words to a treemap where the key is the unique string and the value is the occurances
+     * Adds words to a treemap where the key is the unique string and the value is the occurrences
      *
      * @param word string key to classify in the treemap
      */
