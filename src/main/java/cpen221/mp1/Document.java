@@ -19,7 +19,6 @@ public class Document {
     private String docContent;
     private String[] docSentences;
     private String[] docWords;
-    //private Map<Integer, Integer> phrasesInSentence = new HashMap<>();
     private TreeMap<String, Integer> catalogueWords = new TreeMap<>();
     private String mostPositiveSentence;
     private String mostNegativeSentence;
