@@ -48,19 +48,10 @@ public class ComplexNumber {
     }
 
     /**
-     * amp gives the magnitude of the complex number, defined by:
-     * sqrt(r^2 + i^2), where r is the real component and i is the complex
-     * @return The amplitude of the complex number.
-     */
-    public double amp(){
-        return Math.sqrt(Math.pow(re, 2) + Math.pow(im, 2));
-    }
-
-    /**
      * @return The string representation of the complex number.
      */
     public String toString() {
-        String rep = re + " i" + im;
+        String rep = re + " + " + im + "i";
         return rep;
     }
 

@@ -74,4 +74,22 @@ public class ComplexNumberTests {
         }
     }
 
+    @Test
+    public void testZero(){
+        ComplexNumber a = new ComplexNumber();
+        Assertions.assertEquals(a.im(), 0);
+        Assertions.assertEquals(a.re(), 0);
+    }
+
+    @Test
+    public void testToString(){
+        ComplexNumber a = new ComplexNumber();
+        Assertions.assertEquals(a.toString(), "0.0 + 0.0i");
+    }
+
+    @Test
+    public void testEqualityNotComplex(){
+        ComplexNumber a = new ComplexNumber();
+        Assertions.assertFalse(a.equals(new Object()));
+    }
 }

@@ -23,6 +23,6 @@ public class DFTTests {
     @Test
     public void testDFTConst(){
         int[] testSignal = {2,2,2,2,2,2};
-        Assertions.assertEquals(dft(testSignal)[0].amp(), 12);
+        Assertions.assertEquals(dft(testSignal)[0].re(), 12);
     }
 }

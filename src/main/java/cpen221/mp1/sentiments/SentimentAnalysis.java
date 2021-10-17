@@ -3,7 +3,6 @@ package cpen221.mp1.sentiments;
 import com.google.cloud.language.v1.*;
 import com.google.cloud.language.v1.Document.Type;
 import cpen221.mp1.exceptions.NoSuitableSentenceException;
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

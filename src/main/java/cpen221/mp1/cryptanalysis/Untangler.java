@@ -1,10 +1,6 @@
 package cpen221.mp1.cryptanalysis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static cpen221.mp1.cryptanalysis.DFT.dft;
 
 /**
  * Untangler contains methods to analyze signals in the form of strings,
@@ -49,7 +45,6 @@ public class Untangler {
             else if(superList.get(i).equals(src2List.get(k)) && superList.get(i).equals(src1List.get(j))){
                 superList.remove(i);
                 i--;
-
                 for(Character compare : superList){
                     if(compare.equals(src1List.get((j + 1) % src1.length()))){
                         j++;

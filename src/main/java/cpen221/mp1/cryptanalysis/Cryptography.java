@@ -2,7 +2,6 @@ package cpen221.mp1.cryptanalysis;
 
 import cpen221.mp1.Document;
 
-import java.util.Random;
 
 import static cpen221.mp1.cryptanalysis.DFT.dft;
 
@@ -89,7 +88,7 @@ public class Cryptography {
         int freq = 0;
         for(int i = 1; i < fourier.length; i++){
             if (fourier[i].re() > amp){
-                amp = (int)fourier[i].amp();
+                amp = (int) mag(fourier[i]);
                 freq = i;
             }
         }
@@ -112,6 +111,16 @@ public class Cryptography {
             output[j] = (char) codedText[j];
         }
         return new String(output);
+    }
+
+    /**
+     * mag gives the magnitude of the complex number, defined by:
+     * sqrt(r^2 + i^2), where r is the real component and i is the complex
+     * @param in is the input complex number which from which the magnitude will be calculated.
+     * @return The amplitude of the complex number.
+     */
+    private static double mag(ComplexNumber in){
+        return Math.sqrt(Math.pow(in.re(), 2) + Math.pow(in.im(), 2));
     }
 
 }
