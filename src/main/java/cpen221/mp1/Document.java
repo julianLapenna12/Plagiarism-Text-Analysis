@@ -345,10 +345,20 @@ public class Document {
         return docSentences[sentence_number - 1];
     }
 
+    /**
+     * Finds the average words in a sentence in the document
+     *
+     * @return the average words per sentence as a double
+     */
     public double averageSentenceLength() {
         return ((double) docWords.length) / docSentences.length;
     }
 
+    /**
+     * Finds the average phrases per sentence in the document
+     *
+     * @return the average phrases per sentence as a double
+     */
     public double averageSentenceComplexity() {
         double total = 0;
         for (int i = 0; i < docSentences.length; i++) {
@@ -357,7 +367,12 @@ public class Document {
         return total / docSentences.length;
     }
 
-    //TODO : George javadocks comments
+    /**
+     * Finds the number of phrases in a given sentence
+     *
+     * @param sentence A string containing the sentence to be analyzed
+     * @return the number of phrases in the sentence
+     */
     private int getNumPhrases(String sentence) {
         int count = 1;
 
