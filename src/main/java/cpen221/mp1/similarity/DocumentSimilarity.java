@@ -149,10 +149,21 @@ public class DocumentSimilarity {
                 doc.averageWordLength(), doc.uniqueWordRatio(), doc.hapaxLegomanaRatio()};
     }
 
+    /**
+     *
+     * @param number the number for which the log base 2 value is computed, must be greater than 0
+     * @return double such that 2 raised to the exponent of the return equals the input
+     */
     private double log2(double number) {
         return Math.log(number)/Math.log(2);
     }
 
+    /**
+     * Splits the content of the document at spaces and periods (and backticks apparently) into words
+     *
+     * @param content the String containing all the content of the document
+     * @return a String array with each word as an element
+     */
     private String[] splitWord(Document doc, String content) {
 
         String text = content; // the text to split into sentences
@@ -185,6 +196,12 @@ public class DocumentSimilarity {
         return arrayOfWords;
     }
 
+    /**
+     * Assumes it is called with a word in a String that still has special characters and punctuation
+     *
+     * @param input the String to be trimmed of special characters and formatting
+     * @return a word with no special characters or punctuation
+     */
     private String trimWord(String input) {
         String output = input;
 
@@ -201,6 +218,12 @@ public class DocumentSimilarity {
         return output;
     }
 
+    /**
+     * Checks if a character is a special character
+     *
+     * @param c the character to check
+     * @return true if the character is a special character or a space, false otherwise
+     */
     private boolean checkChar(char c) {
         for (int i = 0; i < specialChars.length; i++) {
             if (c == specialChars[i]) {
@@ -210,6 +233,11 @@ public class DocumentSimilarity {
         return false;
     }
 
+    /**
+     * Adds words to a treemap where the key is the unique string and the value is the occurrences
+     *
+     * @param word string key to classify in the treemap
+     */
     private void classifyWord(Document doc, String word) {
         if (wordCounts.get(doc).containsKey(word)) {
             wordCounts.get(doc).put(word, wordCounts.get(doc).get(word) + 1);
@@ -218,6 +246,11 @@ public class DocumentSimilarity {
         }
     }
 
+    /**
+     * Creates a string of the whole document from an instance of Document.
+     * @param doc is a document with at least 1 sentence.
+     * @return a string containing every sentence of the doc concatenated with spaces in between each sentence.
+     */
     private static String createDocContent(Document doc){
         StringBuilder sb = new StringBuilder();
         for(int i = 1; i <= doc.numSentences(); i++){
@@ -226,6 +259,11 @@ public class DocumentSimilarity {
         return sb.toString();
     }
 
+    /**
+     * Used to access total words in the document
+     *
+     * @return double value of word count in the doc
+     */
     private double totalWords(Document doc) {
         double totalWords = docWords.get(doc).length;
         return totalWords;
