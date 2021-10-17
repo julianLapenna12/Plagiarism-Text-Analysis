@@ -39,7 +39,8 @@ public class Task1SmokeTests {
 
     @Test
     public void testSentinemt() throws NoSuitableSentenceException {
-        System.out.println(testDocument2.getMostPositiveSentence());
+        System.out.println(testDocument2.averageSentenceComplexity());
+        System.out.println(testDocument2.averageSentenceLength());
     }
 
 }

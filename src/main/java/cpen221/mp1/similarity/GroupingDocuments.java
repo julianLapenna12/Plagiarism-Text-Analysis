@@ -5,6 +5,7 @@ import cpen221.mp1.exceptions.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.io.*;
 
@@ -14,9 +15,8 @@ public class GroupingDocuments {
 
     /**
      * Group documents by similarity
-     *
-     * @param allDocuments   the set of all documents to be considered,
-     *                       is not null
+     * @param allDocuments the set of all documents to be considered,
+     *                     is not null
      * @param numberOfGroups the number of document groups to be generated
      * @return groups of documents, where each group (set) contains similar
      * documents following this rule: if D_i is in P_x, and P_x contains at
@@ -25,65 +25,127 @@ public class GroupingDocuments {
      * to) the divergence between D_i and any document that is not in P_x.
      */
     public static Set<Set<Document>> groupBySimilarity(Set<Document> allDocuments, int numberOfGroups) {
-        // TODO: Implement this method
+        Set<Set<Document>> returnGroups = new HashSet<Set<Document>>();
         ArrayList<Set<Document>> groupings = new ArrayList<Set<Document>>();
-        Set<Document> group = new HashSet<Document>();
-        double[] pair = new double[3];
-        int currentGroups = 1;
+        ArrayList<Document> allDocumentsList = new ArrayList<Document>();
+
+        double [][] comparisons = new double[allDocuments.size()][allDocuments.size()];
+        double [] pair = new double[3];
+        int currentGroups = allDocuments.size();
+        int lowestNum =1;
+        boolean sameGroup = false;
 
         DocumentSimilarity docSim = new DocumentSimilarity();
 
-        double [][] comparisons = new double[allDocuments.size()][allDocuments.size()];
 
         for(int i = 0; i < allDocuments.size(); i++) {
-            for(int j = i; j < allDocuments.size(); j++) {
-                comparisons[i][j] = docSim.documentDivergence((Document) allDocuments.toArray()[i],(Document) allDocuments.toArray()[j]);
+            allDocumentsList.add((Document) allDocuments.toArray()[i]);
+        }
+
+        for(int i = 0; i < allDocuments.size(); i++) {
+            for(int j = i+1; j < allDocuments.size(); j++) {
+                comparisons[i][j] = docSim.documentDivergence((Document) allDocumentsList.get(i),(Document) allDocumentsList.get(j));
             }
         }
 
-        for (int i = 0; i < allDocuments.size(); i++) {
-            group.add((Document) allDocuments.toArray()[i]);
+        for(int i = 0; i < allDocuments.size(); i++) {
+            Set<Document> group = new HashSet<Document>();
+            group.add((Document) allDocumentsList.get(i));
             groupings.add(i, group);
         }
 
-        while (currentGroups < numberOfGroups) {
-            pair = findNthLowestPair(comparisons, allDocuments.size(), currentGroups - 1);
+        while (currentGroups > numberOfGroups) {
+            do {
+                sameGroup = false;
+                pair = findNthLowestPair(comparisons, lowestNum);
+                try {
+                    if (findIndex((int)pair[1], groupings, allDocumentsList) == findIndex((int)pair[2], groupings, allDocumentsList)){
+                        sameGroup = true;
+                    }
+                } catch (NotFoundException e) {
+                    e.printStackTrace();
+                }
+                lowestNum++;
+            } while(sameGroup);
 
             try {
-                merge(findIndex((int) pair[1], groupings, allDocuments), findIndex((int) pair[2], groupings, allDocuments), groupings);
-            } catch (Exception e) {
+                merge(findIndex((int)pair[1], groupings, allDocumentsList), findIndex((int)pair[2], groupings, allDocumentsList), groupings);
+            }
+            catch (Exception e){
                 System.out.println("Arrays not found");
             }
 
-            numberOfGroups = calculateNumberOfGroups(groupings);
+            currentGroups = groupings.size();
         }
 
-        return null;
+        returnGroups = makeSet(groupings);
+
+        return returnGroups;
     }
 
-    private static double[] findNthLowestPair(double[][] pairs, int size, int pairNum) {
-        double[] smallest = {1, 1, 1}; //first index is for value of comparison, next two are for indexes of comparison
+    /**
+     * Finds the Nth lowest value in a 2D array of type double
+     *
+     * requires array to have values above 0
+     * requires array to have the same number of rows and columns
+     * requires array to only have values when the column is greater than the row NOTE: this means
+     * no arrays of size 1, only 2 or greater
+     * requires array to not be null
+     * requires number of array values to be smaller or equal to the number of values in the array
+     *
+     *
+     * @param pairs is the array for which the method is searching
+     * @param pairNum is N, which is used to indicate returning the Nth lowest number,
+     *                rather than just the lowest
+     * @returns A double array of size 3 with the Nth lowest value as the first index, and the index of
+     * that value within the given array as the second and third indecies.
+    */
+    private static double [] findNthLowestPair(double[][] pairs, int pairNum) {
+        double [][] pairCopy = new double[pairs.length][pairs.length];
+        double []smallest = {Double.MAX_VALUE, 0, 0};
+        double [] temp = {Double.MAX_VALUE, 0, 0};
+
+        for(int i = 0; i < pairs.length; i++) {
+            for(int j = i +1; j < pairs.length; j++) {
+                pairCopy[i][j] = pairs[i][j];
+            }
+        }
+
         for (int m = 0; m < pairNum; m++) {
-            for (int i = 0; i < size; i++) {
-                for (int j = i; j < size; j++) {
-                    if (pairs[i][j] < smallest[0]) {
+            for (int i = 0; i < pairs.length; i++) {
+                for (int j = i+1; j < pairs.length; j++) {
+                    if (pairCopy[i][j] < smallest[0]) {
                         smallest[0] = pairs[i][j];
                         smallest[1] = i;
                         smallest[2] = j;
                     }
                 }
             }
-            pairs[(int) smallest[1]][(int) smallest[2]] = 1;
-            smallest[0] = 1;
+            for(int i = 0; i < smallest.length; i++) {
+                temp[i] = smallest[i];
+            }
+            pairCopy[(int)smallest[1]][(int)smallest[2]] = Double.MAX_VALUE;
+            smallest[0] = Double.MAX_VALUE;
         }
-        return smallest;
+
+
+        return temp;
     }
 
-    private static int findIndex(int inputIndex, ArrayList<Set<Document>> groups, Set originalDocuments) throws NotFoundException {
+    /**
+     * Finds a document at a specified index (original document) in a list, in a list of sets of other documents
+     *
+     * @param inputIndex Index of document in list
+     * @param groups List of sets
+     * @param originalDocuments List where original document is searched for
+     * @return Index of the set with the original document in groups
+     * @throws NotFoundException when the original document cannot be found in groups
+     */
+    private static int findIndex(int inputIndex, ArrayList<Set<Document>> groups, List<Document> originalDocuments) throws NotFoundException {
         int index = 0;
 
         for (int i = 0; i < groups.size(); i++) {
-            if (groups.get(i).contains(originalDocuments.toArray()[i])) {
+            if (groups.get(i).contains((Document) originalDocuments.get(inputIndex))) {
                 return i;
             }
         }
@@ -92,16 +154,65 @@ public class GroupingDocuments {
         throw new cpen221.mp1.exceptions.NotFoundException("index not found");
     }
 
+    /**
+     * Merges two sets in a list of sets
+     *
+     * requires both indecies to be different, more than 1, and less than or equal to the length
+     * of the list
+     * requires list of sets to have at least 2 elements
+     *
+     * @param index1 Index of the first set
+     * @param index2 Index of the second set
+     * @param groups List of sets
+     */
     private static void merge(int index1, int index2, ArrayList<Set<Document>> groups) {
+        int [] indecies = new int[2];
         Set<Document> temp = new HashSet<Document>();
         temp.addAll(groups.get(index1));
         temp.addAll(groups.get(index2));
-        groups.add(index1, temp);
-        groups.remove(index2);
+
+        indecies = orderLowest(index1, index2);
+
+        groups.remove(indecies[0]);
+        groups.remove(indecies[1] -1 );
+
+        groups.add(temp);
     }
 
-    private static int calculateNumberOfGroups(ArrayList groups) {
-        return groups.size();
+    /**
+     * Turns a list of sets into a set of sets
+     *
+     * @param input list of sets to be changed
+     * @return a set of sets with all the elements of input
+     */
+    private static Set<Set<Document>> makeSet(ArrayList<Set<Document>> input) {
+        Set<Set<Document>> returnSet = new HashSet<Set<Document>>();
+        for (int i = 0; i < input.size(); i++) {
+            returnSet.add(input.get(i));
+        }
+        return returnSet;
+    }
+
+    /**
+     * Orders two integers from lowest to highest
+     * requires integers cannot be null
+     *
+     * @param num1 First integer to be ordered
+     * @param num2 Second integer to be ordered
+     * @return An integer array of size 2 ordered lowest to highest
+     *
+     */
+    private static int[] orderLowest(int num1, int num2) {
+        int [] ordered = new int[2];
+        if (num1 < num2) {
+            ordered[0] = num1;
+            ordered[1] = num2;
+            return ordered;
+        }
+        ordered[0] = num2;
+        ordered[1] = num1;
+        return ordered;
     }
 
 }
+
